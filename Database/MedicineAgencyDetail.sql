@@ -1,0 +1,12 @@
+CREATE TABLE IF  NOT EXISTS MedicalAgencyDetails(
+AgencyId INT NOT NULL AUTO_INCREMENT,
+AgencyName NVARCHAR(200),
+AgencyEmail NVARCHAR(50),
+AgencyContactNumber NVARCHAR(10),
+AgencyAddress NVARCHAR(400),
+AdCrd DATETIME,
+AdCrdBy NVARCHAR(200),
+AdUpd	DATETIME,
+AdUpdBy	NVARCHAR(200),
+CONSTRAINT PK_AgencyDetails PRIMARY KEY(AgencyId)
+);

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <title >Pasad Fertilizer</title>
+	 <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" media="all" />
+	  <link rel="stylesheet" type="text/css" href="../css/custom.css" media="all" />
+ </head>
+    
+<body data-ng-app="loginMod">
+	 <div class="headerTEMP">
+			  		<div class="header-logo">
+			    		<a href="#"><img src="../images/tree-logo.jpg" alt="Prasad Fertilizer"/></a>
+			 		 </div> 
+	</div> 
+	
+	
+	<div class="container-fluid" data-ng-controller="loginCtrl" id = "loginPage" >
+	  <div class="row">
+	        <div class="col-xs-12 col-sm-3 col-md-offset-4" >
+	        	<div class="alert alert-danger" id = "errorDiv" style="display:none">
+  						<strong>Invalid User!</strong> 
+				</div>
+	            <div class="panel panel-default">
+	                <div class="panel-heading"> <strong class="">Login</strong>
+	
+	                </div>
+	                <div class="panel-body">
+	                    <form class="form-horizontal" role="form" name="loginForm" novalidate="novalidate">
+	                        <div class="form-group">
+	                            <label for="inputNumber" class="col-sm-3 control-label">Mobile</label>
+	                            <div class="col-sm-9">
+	                            <text-box data-ng-model="login.mobileNumber"></text-box>
+	                                <!-- <input type="text"  data-ng-model="login.mobile" placeholder="Mobile Number" maxlength="10 " numbers-only="numbers-only" title="Enter  number only" 
+	                                		id = "loginId" required> -->
+	                               <span class="error" ng-show="loginForm.mobileNumber.$error.required">Required with number!</span>
+	                               <span class="error" ng-show="loginForm.mobileNumber.$error.mobile">Invalid mobile!</span>
+	                            </div>
+	                             <div class="alert alert-danger" id = "mobileDiv" style="display:none">
+  										<strong>Enter a valid mobile number!</strong> 
+								</div>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="inputPassword3" class="col-sm-3 control-label">Password</label>
+	                            <div class="col-sm-9">
+	                                <input type="password" class="form-control" name="pwd" data-ng-model="login.password" placeholder="Password"  required >
+	                                <span class="error" ng-show="loginForm.pwd.$dirty && loginForm.pwd.$invalid">
+	                                <span class="error" ng-show="loginForm.pwd.$error.required">Password Required!</span></span>
+	                            </div>
+	                        </div>
+	                         <div class="form-group">
+	                          <label for="companyType" class="col-sm-3 control-label">Company</label>
+	                            	<div class="col-sm-9">	
+					                             <select  class="form-control" data-ng-model="login.companyType" name ="company" required> 
+					                                	<option value="1" selected>Fertilizer</option>
+								                        <option value="2">Medicine</option>
+					                                </select>
+					                       <span class="error" ng-show="loginForm.company.$error.required">Company Required!</span>
+					                  </div>  
+					                              
+					            </div>
+	                        <div class="form-group">
+	                            <div class="col-sm-offset-3 col-sm-9">
+	                                <div class="checkbox">
+	                                    <label class="">
+	                                        <input type="checkbox" class="">Remember me</label>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="form-group last">
+	                            <div class="col-sm-offset-3 col-sm-9">
+	                                <button type="submit" class="btn btn-success btn-sm" data-ng-disabled="loginForm.$invalid" data-ng-click="loginUser(login)">Sign in</button>
+	                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
+	                            </div>
+	                        </div>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+   <!--  <div class="footerTemp abs_pos ng-scope">
+    <div class="footerTemp_right">
+      <ul>
+        <li>Copyright &copy; Prasad Fertilizer Corporation all rights reserved.</li>
+      </ul>   
+    </div> footerTemp_right end  
+    </div>  -->
+</div>
+<script type="text/javascript" src="../js/angular/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="../js/angular/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/angular/angular.min.js"></script>
+ <script type="text/javascript" src="../js/angular/libraries.js"></script>
+ <script type="text/javascript" src="../js/login.js"></script>
+ <script type="text/javascript" src="../js/UiModule.js"></script>
+ <script type="text/javascript" src="../js/googleAnalytics.js"></script>
+ 
+</body>	
+</html>

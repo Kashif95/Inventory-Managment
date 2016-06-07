@@ -1,0 +1,39 @@
+<div class="container-fluid" id="product" data-ng-controller="reportCtrl">
+	 <div class="row">
+	        <div class="col-md-8 col-md-offset-2" >
+	        	<div class="panel panel-default">
+	        		
+	        			<div class="panel-heading"> <h2>Reports</h2>
+	
+	               		 </div>
+	               	<div class="panel-body">	 
+	                    <form class="form-horizontal" role="form" name="reportForm"  novalidate>
+	                    
+	                    	<div class="form-group">
+	                            <label for="agencyName" class="col-sm-3 control-label">Report Type</label>
+	                            <div class="col-sm-6">
+	                            	<div class="radio">
+										  <label><input type="radio" name="optreport">Order Report</label>
+										</div>
+										<div class="radio">
+										  <label><input type="radio" name="optreport">Product Report</label>
+										</div>
+										<div class="radio">
+										  <label><input type="radio" name="optreport">Retailer Report</label>
+								   </div>
+	                            </div>
+	                        </div>
+	                         <div class="form-group last">
+	                            <div class="col-sm-offset-3 col-sm-6" >
+	                                <button type="submit" class="btn btn-success btn-sm" ng-click="downloadReport()" ng-disabled="reportForm.$invalid">Download</button>
+	                            </div>
+	                        </div>
+	                        
+	                    </form>
+	                    </div>
+	                    
+	                    
+	        </div>
+	  </div>      
+	</div>
+</div>

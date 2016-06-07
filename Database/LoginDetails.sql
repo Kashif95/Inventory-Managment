@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS LoginDetails(
+LoginId VARCHAR(64),
+UserId NVARCHAR(10),
+LdCrd DATETIME,
+LdCrdBy NVARCHAR(200),
+LdUpd	DATETIME,
+LdUpdBy	NVARCHAR(200),
+CONSTRAINT PK_LoginDetails PRIMARY KEY(LoginId),
+CONSTRAINT FK_LoginDetails_UserDetails_UserId FOREIGN KEY(UserId) REFERENCES UserDetails(MobileNumber)
+);

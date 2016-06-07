@@ -1,0 +1,148 @@
+<div class="container-fluid" id="retailer" data-ng-controller="retailerCtrl">
+	 <div class="row">
+	        <div class="col-xs-12 col-sm-8 col-md-offset-2" >
+	        	<div class="panel panel-default">
+	        		
+	        			<div class="panel-heading"> <h2>Retailer</h2>
+	
+	               		 </div>
+	               	<div class="panel-body" ng-show="addRetailerInfo">	 
+	                    <form class="form-horizontal" role="form" name="retailerForm" novalidate>
+	                        <div class="form-group">
+	                            <label for="ratailerFName" class="col-sm-3 control-label">Retailer First Name</label>
+	                            <div class="col-sm-6">
+	                                <input type="text" class="form-control" ng-model="retailer.retailerFName" placeholder="Retailer First Name" name="fname" maxlength = "50"  required>
+	                            </div>
+	                            <span class="error" ng-show="retailerForm.fname.$dirty && retailerForm.fname.$invalid">
+								<span ng-show="retailerForm.fname.$error.required">Retailer first name is required</span></span>
+	                        </div>
+	                        
+	                         <div class="form-group">
+	                            <label for="ratailerLName" class="col-sm-3 control-label">Retailer Last Name</label>
+	                            <div class="col-sm-6">
+	                                <input type="text" class="form-control" ng-model="retailer.retailerLName" name = "lname" placeholder="Retailer Last Name" maxlength = "50"  required>
+	                            </div>
+	                            <span class="error" ng-show="retailerForm.lname.$dirty && retailerForm.lname.$invalid">
+								<span ng-show="retailerForm.lname.$error.required">Retailer last name is required</span></span>
+	                        </div>
+	                        
+	                         <div class="form-group">
+	                            <label for="retailerPan" class="col-sm-3 control-label">Retailer License Number</label>
+	                            <div class="col-sm-6">
+	                                <input type="text" class="form-control" ng-model="retailer.retailerPanNumber" name="panNumber" placeholder="Retailer Pan Number" maxlength = "10"  required>
+	                            </div>
+	                             <span class="error" ng-show="retailerForm.panNumber.$dirty && retailerForm.panNumber.$invalid">
+								<span ng-show="retailerForm.panNumber.$error.required">Retailer last name is required</span></span>
+	                        </div>
+	                      
+	                        <div class="form-group">
+	                            <label for="agencyAddress1" class="col-sm-3 control-label">Address Line 1</label>
+	                            <div class="col-sm-6">
+	                            	<input type="text" class="form-control" ng-model="retailer.addressLine1" name="address1" placeholder="Address line 1" required>
+	                       		</div>
+	                       		 <span class="error" ng-show="retailerForm.address1.$dirty && retailerForm.address1.$invalid">
+								<span ng-show="retailerForm.address1.$error.required">Address Line 1 is required</span></span>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="agencyAddress2" class="col-sm-3 control-label">Address Line 2</label>
+	                            <div class="col-sm-6">
+	                            	<input type="text" class="form-control" ng-model="retailer.addressLine2" placeholder="Address line 2" >
+	                       		</div>
+	                        </div>
+	                         <div class="form-group">
+	                            <label for="agencyCity" class="col-sm-3 control-label">City</label>
+	                            <div class="col-sm-6">
+	                           		 <input type="text" class="form-control" ng-model="retailer.city" name="city" placeholder="City" required>
+	                           	 </div>
+	                           	  <span class="error" ng-show="retailerForm.city.$dirty && retailerForm.city.$invalid">
+								<span ng-show="retailerForm.city.$error.required">Retailer city is required</span></span>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="agencyState" class="col-sm-3 control-label">State</label>
+	                            <div class="col-sm-6">
+	                           		 <input type="text" class="form-control" ng-model="retailer.state" name = "state" placeholder="State" required>
+	                           	</div>
+	                           	 <span class="error" ng-show="retailerForm.state.$dirty && retailerForm.state.$invalid">
+								<span ng-show="retailerForm.state.$error.required">Retailer state name is required</span></span>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="retailerEmail" class="col-sm-3 control-label">Retailer Email Address</label>
+	                            <div class="col-sm-6">
+	                                <input type="email" class="form-control" ng-model="retailer.email" autocomplete="off" placeholder="Email Address" name="email" maxlength = "50"  required>
+	                            </div>
+	                            <!--  <span class="error" ng-show="retailerForm.email.$dirty && retailerForm.email.$invalid">
+									<span ng-show="retailerForm.email.$error.required">Email is required</span>
+									<span ng-show="retailerForm.email.$error.email">Email is invalid</span></span> -->
+	                        </div>
+	                       
+	                         <div class="form-group">
+	                            <label for="agencyContact" class="col-sm-3 control-label">Mobile Number</label>
+	                            <div class="col-sm-6">
+	                                <input type="text" class="form-control" ng-model="retailer.mobileNumber" name="mobileNum" maxlength = "10" placeholder="Mobile Number" numbers-only="numbers-only" required >
+	                            </div>
+	                             <span class="error" ng-show="retailerForm.mobileNum.$dirty && retailerForm.mobileNum.$invalid">
+								<span ng-show="retailerForm.mobileNum.$error.required">Retailer Mobile Number is required</span></span>
+	                        </div>
+	                         <div class="form-group">
+	                            <label for="agencyContact" class="col-sm-3 control-label">Alternate Mobile Number</label>
+	                            <div class="col-sm-6">
+	                                <input type="text" class="form-control" ng-model="retailer.alternateNumber" maxlength = "10" placeholder="Alternate Number" numbers-only="numbers-only">
+	                            </div>
+	                        </div>
+	                        
+	                        <div class="form-group last">
+	                            <div class="col-sm-offset-5">
+	                            	<button type="button" class="btn btn-default btn-md" ng-click="addRetailerInfo=!addRetailerInfo" title="Back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+	                                <button type="submit" class="btn btn-success btn-sm" analytics-on="click" analytics-event="save Retailer" analytics-category="saveRetailer" ng-click="saveRetailer();" ng-disabled="retailerForm.$invalid">Save Retailer</button>
+	                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
+	                            </div>
+	                        </div>
+	                    </form>
+	                    </div>
+	                    <div class="panel-body" ng-show="!addRetailerInfo"> 
+	                    	<div class="table-responsive" style="overflow-x: auto;"> 
+	                    		<table   class="table table-striped table-hover">
+	                    			<tr>
+	                    				<th ng-click="sort('retailer_name')">Retailer Name
+	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='retailer_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
+	                    				</th>
+	                    				<th ng-click="sort('retailer_panNumber')">Retailer License Number
+	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='retailer_panNumber'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
+	                    				</th>
+	                    				<th>Retailer Email Address</th>
+	                    				<th>Retailer Address</th>
+	                    				<th>Mobile Number</th>
+	                    				<th>Alternate Number</th>
+	                    				<th ng-show="role=='Admin'">Actions</th>
+	                    		 	</tr>
+	                    		 	<tr dir-paginate="retailer in retailerList|orderBy:sortKey:reverse|itemsPerPage:6">
+	                    		 		<td>{{retailer.retailerFirstName+" "+retailer.retailerLastName}}</td>
+	                    		 		<td>{{retailer.retailerPanNumber}}</td>
+	                    		 		<td>{{retailer.email}}</td>
+	                    		 		<td>{{retailer.address.addressLine1 + "," + retailer.address.addressLine2 +","+ retailer.address.city +","+ retailer.address.state}}</td>
+	                    		 		<td>{{retailer.mobileNumber}}</td>
+	                    		 		<td>{{retailer.alternateNumber}}</td>
+	                    		 		<td ng-show="role=='Admin'"><a href="" title="Edit"><span class="glyphicon glyphicon-pencil" ng-click="editRetailer(retailer)"></span> </a> <a href="" title="Delete"><span class="glyphicon glyphicon-trash"  ng-click="deleteRetailer(retailer)"></span>
+	                    		 		<a href="" title="Print"><span class="glyphicon glyphicon-print"  ng-click="printProduct(product)"></span></a></a></td>
+	                    		 	
+	                    		 	</tr>
+	                    		</table>
+	                    	</div>	
+	                    	<div class="col-xs-12">
+		                    	<div class="col-sm-6">		
+				                    	 <dir-pagination-controls max-size="6" direction-links="true" boundary-links="true" >
+									    </dir-pagination-controls>
+								</div>	    	
+	                    	 <div class="col-sm-offset-3 pull-right" ng-show="role=='Admin'">
+	                                <button type="submit" analytics-on="click" analytics-event="Add Retailer" analytics-category="addRetailer" class="btn btn-success btn-sm" ng-click="addRetailer();addRetailerInfo=!addRetailerInfo">Add New Retailer</button>
+	                         </div>
+	                    	</div>
+	                    
+	                    </div>
+	                    
+	                    </div>
+	        
+	        </div>
+	  </div>      
+
+</div>

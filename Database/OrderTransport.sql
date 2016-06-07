@@ -1,0 +1,14 @@
+CREATE TABLE IF  NOT EXISTS OrderTranportDetail(
+OTDId VARCHAR(64),
+OrderId INT NOT NULL,
+SourceLocation NVARCHAR(200),
+DestinationLocation NVARCHAR(200),
+TransportMode NVARCHAR(50),,
+VehicleNumber NVARCHAR(200),,
+OTDCrd DATETIME,
+OTDCrdBy NVARCHAR(200),
+OTDUpd	DATETIME,
+OTDUpdBy	NVARCHAR(200),
+CONSTRAINT PK_OrderTranportDetail PRIMARY KEY(OTDId),
+CONSTRAINT FK_OrderTranportDetail_OrderDetail_OrderId FOREIGN KEY(OrderId) REFERENCES OrderDetail(OrderId)
+);

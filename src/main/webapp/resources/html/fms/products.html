@@ -1,0 +1,95 @@
+<div class="container-fluid" id="product" data-ng-controller="productsCtrl">
+	 <div class="row">
+	        <div class="col-xs-12 col-sm-8 col-md-offset-2" >
+	        	<div class="panel panel-default">
+	        		
+	        			<div class="panel-heading"> <h2>Products</h2>
+	
+	               		 </div>
+	               	<div class="panel-body" ng-show="addProductInfo">	 
+	                    <form class="form-horizontal" role="form" name="productForm"  novalidate>
+	                    
+	                    	<div class="form-group">
+	                            <label for="agencyName" class="col-sm-3 control-label">Agency Name</label>
+	                            <div class="col-sm-6">
+	                                <select  class="form-control" ng-model="product.agencyId" placeholder="Agency Name" 
+	                                	ng-options="agency.agencyId as agency.agencyName for agency in agencyList | orderBy:'name'" 
+   									 ng-change="update(product.agencyId)">
+	                                	<!--  <option data-ng-repeat="agency in agencyList" id = "{{agency.agencyId}}">{{agency.agencyName}}</option> -->
+	                                </select>
+	                            </div>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="agencyName" class="col-sm-3 control-label">Product Name</label>
+	                            <div class="col-sm-6">
+	                                <input type="text" class="form-control" ng-model="product.productName" placeholder="Product Name" name="productName" maxlength = "50"  required />
+	                            </div>
+	                           		 <span class="error" ng-show="productForm.productName.$dirty && productForm.productName.$invalid">
+									<span ng-show="productForm.productName.$error.required">Product Name is required</span></span>
+	                        </div>
+	                        
+	                        <div class="form-group">
+	                            <label for="productType" class="col-sm-3 control-label">Product Type</label>
+	                            <div class="col-sm-6">
+	                                <select  class="form-control" ng-model="product.productTypeId" placeholder="Product Type" 
+	                                	ng-options="productType.typeId as productType.typeDesc for productType in productTypeList | orderBy:'name'" 
+   									></select>
+	                            </div>
+	                        </div>
+	                       
+	                        <div class="form-group last">
+	                            <div class="col-sm-offset-3 col-sm-6" >
+	                           	    <button type="button" class="btn btn-default btn-md" ng-click="addProductInfo=!addProductInfo" title="Back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+	                                <button type="submit" class="btn btn-success btn-sm" analytics-on="click" analytics-event="save product" analytics-category="saveProduct"  ng-click="saveProduct()" ng-disabled="productForm.$invalid">Save Product</button>
+	                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
+	                            </div>
+	                        </div>
+	                    </form>
+	                    </div>
+	                    
+	                    <div class="panel-body" ng-show="!addProductInfo"> 
+	                    
+	                    	<div class="table-responsive" style="overflow-x: auto;"> 
+	                    		<table   class="table table-striped table-hover">
+	                    			<tr>
+	                    				<th ng-click="sort('product_agency_name')">Agency Name
+	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='agency_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
+	                    				</th>
+	                    				<th ng-click="sort('product_name')">Product Name
+	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='agency_owner'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
+	                    				</th>
+	                    				<th>Product Type</th>
+	                    				<th>Updated By</th>
+	                    				<th>Updated On</th>
+	                    				<th ng-show="role=='Admin'">Actions</th>
+	                    		 	</tr>
+	                    		 	<tr dir-paginate="product in productList|orderBy:sortKey:reverse|itemsPerPage:6">
+	                    		 		<td ng-show="product.companyTypeId==1">{{product.agencyDetail.agencyName}}</td>
+	                    		 		<td ng-show="product.companyTypeId==2">{{product.medicineAgencyDetail.agencyName}}</td>
+	                    		 		<td>{{product.productName}}</td>
+	                    		 		<td>{{product.productType.typeDesc}}</td>
+	                    		 		<td>{{product.updBy}}</td>
+	                    		 		<td>{{product.updOn | date:'MM/dd/yyyy'}}</td>
+	                    		 		<td ng-show="role=='Admin'"><a href="" title="Edit"><span class="glyphicon glyphicon-pencil" ng-click="editProduct(product)"></span> </a> <a href="" title="Delete"><span class="glyphicon glyphicon-trash"  ng-click="deleteProduct(product)"></span></a>
+	                    		 		<a href="" title="Print"><span class="glyphicon glyphicon-print"  ng-click="printProduct(product)"></span></a></td>
+	                    		 	
+	                    		 	</tr>
+	                    		</table>
+	                    	</div>	
+	                    	<div class="col-xs-12">
+		                    	<div class="col-sm-6">	
+				                    	 <dir-pagination-controls max-size="6" direction-links="true" boundary-links="true" >
+									    </dir-pagination-controls>
+								</div>	    	
+	                    	 <div class="col-sm-offset-3 pull-right" ng-show="role=='Admin'">
+	                                <button type="submit" analytics-on="click" analytics-event="Add Product " analytics-category="addProduct" class="btn btn-success btn-sm" ng-click="addProduct();addProductInfo=!addProductInfo">Add New Product</button>
+	                         </div>
+	                    	</div>
+	                    
+	                    </div>
+	                    </div>
+	        
+	        </div>
+	  </div>      
+
+</div>

@@ -1,0 +1,203 @@
+<div class="container-fluid" id="saleOrder" data-ng-controller="saleOrderCtrl">
+	 <div class="row">
+	        <div class="col-xs-12 col-sm-8 col-md-offset-2" >
+	        	<div class="panel-group" id="accordion" ng-show="isNewOrder">
+	        		<div class="panel panel-default">
+	        			<div class="panel-heading"> <h2>Generate Bill</h2>   </div>
+	        		</div>	
+	               	<div class="panel panel-default">	
+	               		<div class="panel-heading" data-toggle="collapse"  data-parent="#accordion" href="#searchAndAdd"> <h4>Search And Add Product</h4>   </div> 
+	               		<div id="searchAndAdd" class="panel-collapse collapse in">
+	               		<div class="alert alert-info" id = "infoDiv" style="display:none">
+  							<strong>Enter quantity to add product.</strong> 
+						</div>
+	               			<div class="panel-body" >
+			                                <table  class="table table-striped table-hover"  id="productTable">
+				                    			<tr>
+				                    				<th>Product Name</th>
+				                    				<th>Quantity</th>
+				                    				<th>Available Stock</th>
+				                    				<th>Unit Price</th>
+				                    				<th>Product Type</th>
+				                    				<th>Total Price</th>
+				                    				<th>Action</th>
+				                    				
+				                    		 	</tr>
+				                    		 	<tr>
+				                    		 		<td><input type="text" class="form-control" id="productSearch" ng-model="productSearchKey" placeholder="Type here to search product" auto-complete /></td>
+				                    		 		<td> <input type = "number" class="form-control" value = "1" id ="prodQuan" ng-model="product.orderedQuantity" min = "1" ng-change="calculatePrice(product)" ng-class="{error:product.quantity==null}" size="5"/>
+			                    		 			<span class="error" ng-show="product.orderedQuantity>product.quantity">Out of stock</span></td>
+				                    		 		<td>{{product.quantity}}</td>
+				                    		 		<td>{{product.sellingPrice}}</td>
+				                    		 		<td>{{product.productDetail.productType.typeDesc}}</td>
+				                    		 		<td>{{product.price}}</td>
+				                    		 		
+				                    		 		<td><button type="submit" class="btn btn-success btn-sm" ng-click="addThisProduct(product)" title="Add to order" ng-disabled="isProductAdded"><span class="glyphicon glyphicon-plus"></span></button></td>
+				                    		 	
+				                    		 	</tr>
+				                   </table>
+				                  <hr> 
+				                <div id="orderDetails" ng-show="showOrderDetails">   
+						            <div class="panel-heading" > <h5>Order Details</h5>   
+			               			</div>  
+						                 <table   class="table table-striped table-hover">
+			                    			  <tr ng-repeat="product in selectedProductList track by product.stockId">
+			                    		 		<td>{{product.productName}}</td>
+			                    		 		<td>{{product.orderedQuantity}}</td>
+			                    		 		<td>{{product.availableQuantity}}</td>
+			                    		 		<td>{{product.sellingPrice}}</td>
+			                    		 		<td>{{product.productType}}</td>
+			                    		 		<td>{{product.price}}</td>
+			                    		 		<td><button type="submit" class="btn btn-success btn-sm" ng-click="deleteThisProduct(product)" title = "Delete from order"><span class="glyphicon glyphicon-minus"></span></button></td>
+			                    		 	
+			                    		 	</tr>
+			                    	</table>
+			                    	<hr>
+			                    	<div class="col-xs-12 col-xs-offset-7">
+			                    	 		<label for="agencyName" class="col-sm-2">Total Price:</label>
+			                    	 		<div class="col-sm-2">Rs. {{totalPrice}}</div>
+			                                <button type="submit" class="btn btn-success btn-sm" data-toggle="collapse" data-parent="#accordion" title = "continue to payment" data-target="#paymentInfo" ng-click="continueToCustomer();" ng-disabled="validate">Continue</button>
+			                    	</div>
+		                     </div>	
+	                      
+	                    </div>
+	                  </div>
+	              </div>      
+	              
+	            <div class="panel panel-default">	
+	               		<div class="panel-heading" data-toggle="collapse"> <h4>Payment</h4>   
+	               		</div> 
+	               	    <div id="paymentInfo" class="collapse">	       
+	                      <div class="panel-body" >
+	                      		<form class="form-horizontal" role="form">
+	                    			<div class="form-group">
+			                        <label for="billNumber" class="col-sm-3 control-label">Bill Number:</label>
+			                            <label for="billNumber" class="col-sm-2 control-label" id = "priceLabel">
+			                            	{{order.billNumber}}
+			                            </label>
+			                            
+			                         <label for="billDate" class="col-sm-3 control-label">Bill Date:</label>
+			                            <div class="col-sm-3 ">
+	    									<div class="input-group">
+	    										<mydatepicker data-ng-model="order.billDate" date-options="dateOptions" opened="opened"/>
+	    									</div>
+    									
+	                             </div>  
+			                       </div> 
+			                    	<div class="form-group">
+			                            <label for="customerName" class="col-sm-3 control-label">Customer Name:</label>
+			                            <div class="col-sm-3">
+			                            	<input type="text" class="form-control" ng-model="order.customerName" value = "0" maxlength = "20" required /> 
+			                            </div>
+			                            
+			                             <label for="customerNumber" class="col-sm-2 control-label">Contact Number:</label>
+			                            <div class="col-sm-3">
+			                            	<input type="text" class="form-control" ng-model="order.customerMobile" value = "0" maxlength = "10" numbers-only="numbers-only"  required/> 
+			                            </div>
+			                        </div>
+			                        <div class="form-group">
+			                        <label for="totalOrder" class="col-sm-3 control-label">Grand Total:</label>
+			                            <label for="price" class="col-sm-2 control-label" id = "priceLabel">
+			                            	Rs. {{order.orderPrice}} 
+			                            </label>
+			                            <label for="discount" class="col-sm-3 control-label">Discount (%):</label>
+				                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" ng-model="order.discountPercentage" value = "0" maxlength = "20" required   ng-blur="calcOrderPriceWithDiscount()"/>
+	                            		</div>
+			                       </div>     
+			                        <div class="form-group">
+				                        <label for="discount" class="col-sm-3 control-label">Payment:</label>
+				                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" ng-model="order.payment" value = "0" maxlength = "20" required   ng-blur="calcBalanceAmnt()"/>
+	                            		</div>
+				                        <label for="taxAmount" class="col-sm-2 control-label">Balance:</label>
+				                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" ng-model="order.balanceAmount" value = "0" maxlength = "20" required disabled="disabled" />
+	                            		</div>
+				                   </div> 
+				                   <div class="form-group">
+						                   <label for="orderTotal" class="col-sm-3 control-label">Payble Amount:</label>
+					                            <label for="price" class="col-sm-2 control-label" id = "priceLabel">
+					                            	Rs. {{order.orderTotalPrice}} 
+					                        </label>
+					                         <label for="paymentMode" class="col-sm-3 control-label">Payment Mode:</label>
+					                            <div class="col-sm-3">
+					                             <select  class="form-control" ng-model="order.paymentMode"> 
+					                                	<option value="cash" selected>Cash</option>
+								                        <option value="credit">On Credit</option>
+								                        <option value="card">Debit Card</option>
+								                          <option value="payTm">PayTM</option>
+					                                </select>
+					                            </div>
+			                        </div>
+			                        
+			                       <hr> 
+			                     <div class="form-group last">
+	                            	<div class="col-sm-offset-3 col-sm-6" >
+		                                <button type="submit" analytics-on="click" analytics-event="Save medical order" analytics-category="Commands" class="btn btn-success btn-sm" ng-click="saveOrderDetails();isNewOrder=!isNewOrder">Generate Order</button>
+	                            </div>
+	                        </div>
+	                       </form> 
+	                      
+	                      </div>
+	                    </div>
+	            </div>               
+	        
+	        </div>
+	        <div class="panel panel-default" ng-show="!isNewOrder">
+	        		<div class="panel-heading"> <h2>Orders</h2>
+	               		 </div>
+	               	<div class="panel-body">
+	               		<div class="table-responsive" style="overflow-x: auto;"> 
+	                    	<table   class="table table-striped table-hover">
+	                    			<tr>
+	                    				<th ng-click="sort('order_id')">Bill Number
+	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='order_id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
+	                    				</th>
+	                    				<th>Bill Date</th>
+	                    				<th ng-click="sort('retailer_name')">Customer Name
+	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='retailer_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
+	                    				</th>
+	                    				<th>Product </th>
+	                    				<th>Order Price</th>
+	                    				<th>Payment Mode</th>
+	                    				<th>Payment Status</th>
+	                    				<th>Amount Paid</th>
+	                    				<th>Balance Amount</th>
+	                    				<th>Action</th>
+	                    		 	</tr>
+	                    		 	<tr dir-paginate="generatedOrder in generatedOrderList|orderBy:sortKey:reverse|itemsPerPage:6">
+	                    		 		<td>{{generatedOrder.order.billNumber}}</td>
+	                    		 		<td>{{generatedOrder.order.billDate| date:'dd/MM/yyyy'}}</td>
+	                    		 		<td>{{generatedOrder.order.customerName}}</td>
+	                    		 		<td><a href="" ng-click="showProductDetails(generatedOrder.orderedProductList)">View Product</a></td>
+	                    		 		<td>Rs.{{generatedOrder.order.orderTotalPrice}} </td>
+	                    		 		<td>{{generatedOrder.order.paymentMode}}</td>
+	                    		 		<td ng-if="generatedOrder.order.paymentStatus ==false">Pending</td>
+	                    		 		<td ng-if="generatedOrder.order.paymentStatus==true">Completed</td>
+	                    		 		<td>{{generatedOrder.order.payment}}</td>
+	                    		 		<td>{{generatedOrder.order.balanceAmount}}</td>
+	                    		 		<td><button type="submit" class="btn  btn-sm" ng-click="cancelOrder(generatedOrder.order.orderId)">Cancel</button> 
+	                    		 		<a href="" title="Print"><span class="glyphicon glyphicon-print"  ng-click="print(generatedOrder.order)"></span></a></td>
+	                    		 	
+	                    		 	</tr>
+	                    	</table>
+	                    </div>	
+	                    	<div class="col-xs-12">
+		                    	<div class="col-sm-6">	
+				                    	 <dir-pagination-controls max-size="6" direction-links="true" boundary-links="true" >
+									    </dir-pagination-controls>
+								</div>	    	
+	                    	 <div class="col-sm-offset-3 pull-right" ng-show="role=='Admin'">
+	                                <button type="submit" analytics-on="click" analytics-event="Generate Medical Order" analytics-category="Commands" class="btn btn-success btn-sm" ng-click="isNewOrder=!isNewOrder">Generate New Order</button>
+	                         </div>
+	                    	</div>	
+	                    	<div class="popupOverlay" id="loadOverlay"  style="display:none;"></div>
+								<div class="loadPopup" id="loadingCon"  style="display:none;">
+								<load-popup></load-popup>
+							</div>  
+	               	</div>
+	        </div>
+	  </div>      
+	</div>
+</div>

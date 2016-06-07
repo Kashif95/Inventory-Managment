@@ -1,0 +1,20 @@
+{
+	"popup" : {
+		 "product":{
+		 	"text":"product",
+ 			"header":"Product Details"
+ 			},
+     	  "payment":{
+     	  	"text":"payment",
+     		"header":"Payment Details"
+    	 },
+    	 "order":{
+    	 	"text":"Your Order has been saved successfully",
+     		"header":"Success"
+		 },
+		  "updatePayment":{
+    	 	"text":"Update Order Payment",
+     		"header":"Success"
+		 }
+	}	 
+}    	
