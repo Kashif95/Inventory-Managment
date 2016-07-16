@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService{
 		Short compType = (Short) userDetailMap.get(FMSConstant.USER_COMPANY);
 		String userName = (String) userDetailMap.get(FMSConstant.USER_NAME);
 		ProductDetail product = null;
-		if(productDetail.getProductId()==null){
+		if(productDetail.getProductId()==0){
 			 product = new ProductDetail();
 			 product.setCreatedBy(userName);
 			 product.setCreatedOn(new Date());

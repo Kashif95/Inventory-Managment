@@ -19,6 +19,7 @@ loginMod.controller('loginCtrl',function($scope,sessionService,$window){
 			        						usrSession.compType = response.data.company;
 			        						usrSession.isLogged = true;
 			        						sessionStorage.setItem("session", JSON.stringify(usrSession));
+			        						sessionStorage.setItem("activeMenu", "home");
 			        	        			sessionService.setSession(usrSession);
 			        	        			if(usrSession.compType==1){
 			        	        				$window.location.href = "../../resources/html/fms/home.html";
@@ -65,6 +66,7 @@ loginMod.service('sessionService', function($http,$window) {
     };
     this.logout = function() {
         sessionStorage.removeItem("session");
+        sessionStorage.removeItem("activeMenu");
         var url=  '/inventory/logout';
 		var logdetail =  $http.post(url,null).then(function(response){
 			if(response.status==200){

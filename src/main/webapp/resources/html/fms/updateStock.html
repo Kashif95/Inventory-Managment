@@ -1,43 +1,181 @@
 <div class="container-fluid" id="dashboard" data-ng-controller="inventoryCtrl">
 
 		<div class="row">
-	        <div class="col-xs-12 col-sm-8 col-md-offset-2" >
+	        <div class="col-xs-12 col-sm-9 col-md-offset-2" >
 	        	<div class="panel panel-default">
 	        		
 	        			<div class="panel-heading"> <h2>Add/Update Stock</h2>
 	
 	               		 </div>
 	               	<div class="panel-body" ng-show="addStockInfo">	 
-	                    <form class="form-horizontal" role="form" name="productStock">
+	                    <form class="form-horizontal" role="form" name="productStock" ng-show="compType==1"  novalidate>
+	                    	
+	                    	<div class="form-group">
+			                        <label for="invoiceNumber" class="col-sm-3 control-label">Invoice Number:</label>
+			                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" name = "invoiceNum" ng-model="stockMisc.invoiceNumber" placeholder="Invoice Number" maxlength = "50" required />
+	                            		
+		                            		<div class="help-inline">
+		                            		<span class="error" ng-show="productStock.invoiceNum.$dirty && productStock.invoiceNum.$invalid">
+											<span ng-show="productStock.invoiceNum.$error.required">Invoice Number is required.</span></span>
+											</div>
+										</div>	
+			                            
+			                         <label for="billDate" class="col-sm-3 control-label">Invoice Date:</label>
+			                            <div class="col-sm-3 ">
+	    										<input type="text" class="form-control" name = "invoiceDate" placeholder="Invoice Date" data-ng-model="stockMisc.invoiceDate" id="invoiceDate" required/>
+    									
+	                        			 </div>
+	                         </div>
+	                         <div class="form-group">
+			                         <label for="dueDate" class="col-sm-3 control-label">Due Date:</label>
+			                            <div class="col-sm-3 ">
+	    										<input type="text" class="form-control" name = "dueDate" data-ng-model="stockMisc.dueDate" id="dueDate" placeholder="Due Date"/>
+	                        			 </div>
+			                            
+			                         <label for="DoNumber" class="col-sm-3 control-label">DO Number:</label>
+			                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" name = "doNum" ng-model="stockMisc.doNumber" placeholder="DO Number" maxlength = "50" required />
+	                            		
+		                            		<div class="help-inline">
+		                            		<span class="error" ng-show="productStock.doNum.$dirty && orderForm.doNum.$invalid">
+											<span ng-show="productStock.doNum.$error.required">DO Number is required.</span></span>
+											</div>
+										</div>
+	                         </div>
+	                         <div class="form-group">
+	                         
+			                        <label for="billNumber" class="col-sm-3 control-label">Challan Number:</label>
+			                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" name = "challanNum" ng-model="stockMisc.challanNumber" placeholder="Challan Number" maxlength = "50" required />
+	                            		
+		                            		<div class="help-inline">
+		                            		<span class="error" ng-show="productStock.challanNum.$dirty && productStock.challanNum.$invalid">
+											<span ng-show="productStock.challanNum.$error.required">Challan Number is required.</span></span>
+											</div>
+										</div>	
+			                            
+			                         <label for="billDate" class="col-sm-3 control-label">Challan Date:</label>
+			                            <div class="col-sm-3 ">
+	    										<input type="text" class="form-control" name = "challanDate" data-ng-model="stockMisc.challanDate" id="challanDate" placeholder="Challan Date" required/>
+    									
+	                            		 </div>
+	                            </div>
+	                            <hr/>
+	                    	<div class="form-group">
+	                            <label for="agencyName" class="col-sm-3 control-label">Agency Name:</label>
+	                            <div class="col-sm-3" ng-show="compType==1">
+	                                <select  class="form-control" name = "agency" ng-model="stock.agencyId" placeholder="Agency Name"
+	                                	 ng-options="agency.agencyId as agency.agencyName for agency in agencyList | orderBy:'name'" 
+   									 ng-change="populateProduct()" required> 
+	                                </select>
+	                            </div>
+	                            <span class="error" ng-show="productStock.agency.$dirty && productStock.agency.$invalid">
+									<span ng-show="productStock.agency.$error.required">Agency is required.</span></span>
+									
+								<label for="productName" class="col-sm-3 control-label">Product Name:</label>
+	                            <div class="col-sm-3">
+	                                <select  class="form-control" name = "product" ng-model="stock.productId" placeholder="Agency Name" 
+	                                	ng-options="product.productId as product.productName for product in productList | orderBy:'name'" 
+   									 ng-change="updateQuantity()" required>
+	                                </select>
+	                                 <span class="error" ng-show="productStock.product.$error.required">Product is required.</span>
+	                            </div>
+	                             <!-- <span class="error" ng-show="productStock.product.$dirty && productStock.product.$invalid"> -->
+							   <!-- </span> --> 	
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="quantity" class="col-sm-3 control-label">Total Quantity In Stock(In tons) </label>
+	                            <div class="col-sm-3">
+	                                {{stock.quantity}}
+	                            </div>
+	                            <label for="quantity" class="col-sm-3 control-label">Quantity To Add(In tons)</label>
+	                            <div class="col-sm-3">
+	                                 <input type="text" class="form-control" ng-model="quantityToAdd" placeholder="Add Qunatity" maxlength = "5" name="quan"   numbers-only="numbers-only" required/>
+	                           	<span class="error" ng-show="productStock.quan.$dirty && productStock.quan.$invalid">
+								<span ng-show="productStock.quan.$error.required"> Quantity is required</span></span>
+	                            </div>
+	                            
+	                        </div>
+	                       
+	                        <!-- <div class="form-group" ng-show="editStockInfo">
+	                            <label for="quantity" class="col-sm-3 control-label">Quantity To Remove(In tons)</label>
+	                            <div class="col-sm-3">
+	                                 <input type="text" class="form-control" ng-model="quantityToRemove" placeholder="Remove Quantity" maxlength = "5"  value = "0" name="qtnToRemove"  numbers-only="numbers-only"/>
+	                            </div>
+	                             <span class="error" ng-show="productStock.qtnToRemove.$dirty && productStock.qtnToRemove.$invalid">
+								<span ng-show="productStock.qtnToRemove.$error.required"> Quantity to remove  is required</span></span> 
+	                        </div> -->
+		                    <div class="form-group">
+		                            <label for="price" class="col-sm-3 control-label">Cost Price(Per Sack) Rs</label>
+		                            <div class="col-sm-3">
+		                                 <input type="text" class="form-control" ng-model="stock.costPrice" placeholder="Cost Price" maxlength = "10"  name="costPrice" required  />
+		                           		  <span class="error" ng-show="productStock.costPrice.$dirty && productStock.costPrice.$invalid">
+									<span ng-show="productStock.costPrice.$error.required"> Cost price is required</span></span>
+		                            </div>
+		                           
+									
+									 <label for="price" class="col-sm-3 control-label">Selling Price(Per Sack) Rs</label>
+		                            <div class="col-sm-3">
+		                                 <input type="text" class="form-control" ng-model="stock.sellingPrice" placeholder="Selling Price" maxlength = "10" name="sellingPrice" required  />
+		                            	 <span class="error" ng-show="productStock.sellingPrice.$dirty && productStock.sellingPrice.$invalid">
+										 <span ng-show="productStock.sellingPrice.$error.required"> Selling price is required</span></span>
+		                            </div>
+		                            
+		                        </div>
+		                  
+	                        <div class="form-group">
+	                            <label for="date" class="col-sm-3 control-label">Arrival Date</label>
+	                            <div class="col-sm-3 ">
+    									
+    									<input type="text" class="form-control" name = "arrivalDate" data-ng-model="stock.arrivalDate" id="arrivalDate" required/>
+    									<span class="error" ng-show="productStock.arrivalDate.$dirty && productStock.arrivalDate.$invalid">
+										<span ng-show="productStock.arrivalDate.$error.required">Arrival Date is required</span></span>
+	                             </div>
+	                             <label for="godwnLoc" class="col-sm-3 control-label">Godown Address:</label>
+				                           <div class="col-sm-3">
+		                                		<textarea class="form-control" name="godwnLoc" ng-model="stock.godownAddress" placeholder="Godwn Address" maxlength = "100" required />
+			                            		<div class="help-inline">
+			                            		 <span class="error" ng-show="productStock.godwnLoc.$dirty && productStock.godwnLoc.$invalid">
+												<span ng-show="productStock.godwnLoc.$error.required">Godown Address is required.</span></span>
+												</div>
+											</div>	
+	                        </div>
+	                       
+	                        <div class="form-group last">
+	                            <div class="col-sm-offset-3 col-sm-6" >
+	                            	<button type="button" class="btn btn-default btn-md" ng-click="addStockInfo=!addStockInfo" title="Back"><span class="glyphicon glyphicon-arrow-left"></span></button>
+	                                <button type="submit" class="btn btn-success btn-sm" analytics-on="click" analytics-event="save inventory" analytics-category="saveInventory" ng-disabled="productStock.$invalid" ng-click="saveProductStock()">Add Stock</button>
+	                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
+	                            </div>
+	                        </div>
+	                    </form>
+	                    <form class="form-horizontal" role="form" name="medicalStock" ng-show="compType==2"  novalidate>
 	                    
 	                    	<div class="form-group">
 	                            <label for="agencyName" class="col-sm-3 control-label">Agency Name</label>
-	                            <div class="col-sm-4" ng-show="compType==1">
-	                                <select  class="form-control" ng-model="stock.agencyId" placeholder="Agency Name"
+	                            <div class="col-sm-3">
+	                               <select  class="form-control" name = "agency" ng-model="stock.medicineAgencyId" placeholder="Agency Name"
 	                                	 ng-options="agency.agencyId as agency.agencyName for agency in agencyList | orderBy:'name'" 
    									 ng-change="populateProduct()"> 
-	                                	<!--  <option data-ng-repeat="agency in agencyList" id = "{{agency.agencyId}}" >{{agency.agencyName}}</option>-->
 	                                </select>
 	                            </div>
-	                            <div class="col-sm-4" ng-show="compType==2">
-	                                <select  class="form-control" ng-model="stock.medicineAgencyId" placeholder="Agency Name"
-	                                	 ng-options="agency.agencyId as agency.agencyName for agency in agencyList | orderBy:'name'" 
-   									 ng-change="populateProduct()"> 
-	                                	<!--  <option data-ng-repeat="agency in agencyList" id = "{{agency.agencyId}}" >{{agency.agencyName}}</option>-->
-	                                </select>
-	                            </div>
+	                            <span class="error" ng-show="medicalStock.agency.$dirty && medicalStock.agency.$invalid">
+								<span ng-show="medicalStock.agency.$error.required">Agency is required.</span></span>
 	                        </div>
 	                        <div class="form-group">
-	                            <label for="productName" class="col-sm-3 control-label">Product Name</label>
-	                            <div class="col-sm-4">
-	                                <select  class="form-control" ng-model="stock.productId" placeholder="Agency Name" 
+	                            <label for="productName" class="col-sm-2 control-label">Product Name</label>
+	                            <div class="col-sm-3">
+	                                <select  class="form-control" name = "product" ng-model="stock.productId" placeholder="Agency Name" 
 	                                	ng-options="product.productId as product.productName for product in productList | orderBy:'name'" 
-   									 ng-change="update(product.agencyId)">
+   									 ng-change="update(product.agencyId)" required>
 	                                </select>
 	                            </div>
+	                             <span class="error" ng-show="medicalStock.product.$dirty && medicalStock.product.$invalid">
+							    <span ng-show="medicalStock.product.$error.required">Product is required.</span></span> 
 	                        </div>
 	                        <div class="form-group">
-	                            <label for="quantity" class="col-sm-3 control-label">Total Quantity </label>
+	                            <label for="quantity" class="col-sm-3 control-label">Total Quantity(In tons) </label>
 	                            <div class="col-sm-3">
 	                                {{stock.quantity}}
 	                            </div>
@@ -45,76 +183,59 @@
 	                         <div class="form-group">
 	                            <label for="quantity" class="col-sm-3 control-label">Quantity To Add</label>
 	                            <div class="col-sm-3">
-	                                 <input type="text" class="form-control" ng-model="quantityToAdd" placeholder="Add Qunatity" maxlength = "5" name="quan" required  numbers-only="numbers-only"/>
+	                                 <input type="text" class="form-control" ng-model="quantityToAdd" placeholder="Add Qunatity" maxlength = "5" name="quan"   numbers-only="numbers-only" required/>
 	                            </div>
-	                            <span class="error" ng-show="productStock.quan.$dirty && productStock.quan.$invalid">
-								<span ng-show="productStock.quan.$error.required"> Quantity is required</span></span>
+	                            <span class="error" ng-show="medicalStock.quan.$dirty && medicalStock.quan.$invalid">
+								<span ng-show="medicalStock.quan.$error.required"> Quantity is required</span></span>
 	                        </div>
 	                        <div class="form-group" ng-show="editStockInfo">
-	                            <label for="quantity" class="col-sm-3 control-label">Quantity To Remove</label>
+	                            <label for="quantity" class="col-sm-3 control-label">Quantity To Remove(In tons)</label>
 	                            <div class="col-sm-3">
-	                                 <input type="text" class="form-control" ng-model="quantityToRemove" placeholder="Remove Quantity" maxlength = "5"  value = "0" name="qtnToRemove" required  numbers-only="numbers-only"/>
+	                                 <input type="text" class="form-control" ng-model="quantityToRemove" placeholder="Remove Quantity" maxlength = "5"  value = "0" name="qtnToRemove"  numbers-only="numbers-only"/>
 	                            </div>
-	                            <span class="error" ng-show="productStock.qtnToRemove.$dirty && productStock.qtnToRemove.$invalid">
-								<span ng-show="productStock.qtnToRemove.$error.required"> Quantity to remove  is required</span></span>
+	                             <!-- <span class="error" ng-show="productStock.qtnToRemove.$dirty && productStock.qtnToRemove.$invalid">
+								<span ng-show="productStock.qtnToRemove.$error.required"> Quantity to remove  is required</span></span>  -->
 	                        </div>
-	                        <div ng-show="compType==1">
-		                        <div class="form-group">
-		                            <label for="price" class="col-sm-3 control-label">Cost Price(Per Sack) Rs</label>
-		                            <div class="col-sm-3">
-		                                 <input type="text" class="form-control" ng-model="stock.costPrice" placeholder="Cost Price" maxlength = "10"  name="costPrice" required  />
-		                            </div>
-		                            <span class="error" ng-show="productStock.costPrice.$dirty && productStock.costPrice.$invalid">
-									<span ng-show="productStock.costPrice.$error.required"> Cost price is required</span></span>
-		                        </div>
-		                        <div class="form-group">
-		                            <label for="price" class="col-sm-3 control-label">Selling Price(Per Sack) Rs</label>
-		                            <div class="col-sm-3">
-		                                 <input type="text" class="form-control" ng-model="stock.sellingPrice" placeholder="Selling Price" maxlength = "10" name="sellingPrice" required  />
-		                            </div>
-		                            <span class="error" ng-show="productStock.sellingPrice.$dirty && productStock.sellingPrice.$invalid">
-									<span ng-show="productStock.sellingPrice.$error.required"> Selling price is required</span></span>
-		                        </div>
+		                     <div class="form-group">
+	                            <label for="price" class="col-sm-3 control-label">Unit Cost Price Rs</label>
+	                            <div class="col-sm-3">
+	                                 <input type="text" class="form-control" ng-model="stock.costPrice" placeholder="Cost Price" maxlength = "10"  name="costPrice" required  />
+	                            </div>
+	                            <span class="error" ng-show="medicalStock.costPrice.$dirty && medicalStock.costPrice.$invalid">
+								<span ng-show="medicalStock.costPrice.$error.required"> Cost price is required</span></span>
 	                        </div>
-	                        <div ng-show="compType==2">
-		                        <div class="form-group">
-		                            <label for="price" class="col-sm-3 control-label">Unit Cost Price Rs</label>
-		                            <div class="col-sm-3">
-		                                 <input type="text" class="form-control" ng-model="stock.costPrice" placeholder="Cost Price" maxlength = "10"  name="costPrice" required  />
-		                            </div>
-		                            <span class="error" ng-show="productStock.costPrice.$dirty && productStock.costPrice.$invalid">
-									<span ng-show="productStock.costPrice.$error.required"> Cost price is required</span></span>
-		                        </div>
-		                        <div class="form-group">
-		                            <label for="price" class="col-sm-3 control-label">Unit Selling Price Rs</label>
-		                            <div class="col-sm-3">
-		                                 <input type="text" class="form-control" ng-model="stock.sellingPrice" placeholder="Selling Price" maxlength = "10" name="sellingPrice" required  />
-		                            </div>
-		                            <span class="error" ng-show="productStock.sellingPrice.$dirty && productStock.sellingPrice.$invalid">
-									<span ng-show="productStock.sellingPrice.$error.required"> Selling price is required</span></span>
-		                        </div>
-		                        <label for="date" class="col-sm-3 control-label">Expiary Date</label>
-	                            <div class="col-sm-3 ">
-    									<div class="input-group">
-    									<mydatepicker data-ng-model="stock.expiryDate" date-options="dateOptions" opened="opened"/>
-    									</div>
-    									
-	                             </div>
+	                        <div class="form-group">
+	                            <label for="price" class="col-sm-3 control-label">Unit Selling Price Rs</label>
+	                            <div class="col-sm-3">
+	                                 <input type="text" class="form-control" ng-model="stock.sellingPrice" placeholder="Selling Price" maxlength = "10" name="sellingPrice" required  />
+	                            </div>
+	                            <span class="error" ng-show="medicalStock.sellingPrice.$dirty && medicalStock.sellingPrice.$invalid">
+								<span ng-show="medicalStock.sellingPrice.$error.required"> Selling price is required</span></span>
 	                        </div>
+	                        <label for="date" class="col-sm-3 control-label">Expiary Date</label>
+                            <div class="col-sm-3 ">
+   									<div class="input-group">
+   									<mydatepicker data-ng-model="stock.expiryDate" name = "expiryDate" date-options="dateOptions" opened="opened"/>
+   									</div>
+   									<span class="error" ng-show="medicalStock.expiryDate.$dirty && medicalStock.expiryDate.$invalid">
+									<span ng-show="medicalStock.expiryDate.$error.required">Expiry date is required</span></span>
+   									
+                             </div>
 	                        <div class="form-group">
 	                            <label for="date" class="col-sm-3 control-label">Arrival Date</label>
 	                            <div class="col-sm-3 ">
     									<div class="input-group">
-    									<mydatepicker data-ng-model="stock.arrivalDate" date-options="dateOptions" opened="opened"/>
+    									<mydatepicker data-ng-model="stock.arrivalDate" name="arrivalDate" date-options="dateOptions" opened="opened" required/>
     									</div>
-    									
+    									<span class="error" ng-show="medicalStock.arrivalDate.$dirty && medicalStock.arrivalDate.$invalid">
+										<span ng-show="medicalStock.arrivalDate.$error.required">Arrival Date is required</span></span>
 	                             </div>
 	                        </div>
 	                       
 	                        <div class="form-group last">
 	                            <div class="col-sm-offset-3 col-sm-6" >
 	                            	<button type="button" class="btn btn-default btn-md" ng-click="addStockInfo=!addStockInfo" title="Back"><span class="glyphicon glyphicon-arrow-left"></span></button>
-	                                <button type="submit" class="btn btn-success btn-sm" ng-click="saveProductStock()">Update</button>
+	                                <button type="submit" class="btn btn-success btn-sm" analytics-on="click" analytics-event="save inventory" analytics-category="saveInventory" ng-disabled="medicalStock.$invalid" ng-click="saveProductStock()">Add Stock</button>
 	                                <button type="reset" class="btn btn-default btn-sm">Reset</button>
 	                            </div>
 	                        </div>
@@ -125,6 +246,9 @@
 	                    	<div class="table-responsive" style="overflow-x: auto;"> 
 	                    		<table   class="table table-striped table-hover">
 	                    			<tr>
+	                    				<th ng-show="compType==1">Invoice Number</th>
+	                    				<th ng-show="compType==1">Invoice Date</th>
+	                    				<th ng-show="compType==1">DO Number</th>
 	                    				<th ng-click="sort('inventory_agency_name')">Agency Name
 	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='inventory_agency_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
 	                    				</th>
@@ -136,22 +260,25 @@
 	                    				<th>Selling Price(Rs.)</th>
 	                    				<th ng-show="compType==2">Expiry Date</th>
 	                    				<th>Arrival Date</th>
-	                    				<th>Updated By</th>
+	                    				<th ng-show="compType==1">Godown Address</th>
 	                    				<th>Updated On</th>
 	                    				<th ng-show="role=='Admin'">Actions</th>
 	                    		 	</tr>
 	                    		 	<tr dir-paginate="stock in stockList|orderBy:sortKey:reverse|itemsPerPage:6">
+	                    		 		<td ng-show="compType==1">{{stock.stockMiscDetail.invoiceNumber}}</td>
+	                    		 		<td ng-show="compType==1">{{stock.stockMiscDetail.invoiceDate | date:'dd/MM/yyyy'}}</td>
+	                    		 		<td ng-show="compType==1">{{stock.stockMiscDetail.doNumber}}</td>
 	                    		 		<td ng-show="compType==1">{{stock.agencyDetail.agencyName}}</td>
 	                    		 		<td ng-show="compType==2">{{stock.medicineAgencyDetail.agencyName}}</td>
 	                    		 		<td>{{stock.productDetail.productName}}</td>
 	                    		 		<td>{{stock.quantity}}</td>
 	                    		 		<td>{{stock.costPrice}} </td>
 	                    		 		<td>{{stock.sellingPrice}}</td>
-	                    		 		<td ng-show="compType==2">{{stock.expiryDate | date:'MM/dd/yyyy'}}</td>
-	                    		 		<td>{{stock.arrivalDate | date:'MM/dd/yyyy'}}</td>
-	                    		 		<td>{{stock.updBy}}</td>
-	                    		 		<td>{{stock.updOn | date:'MM/dd/yyyy'}}</td>
-	                    		 		<td ng-show="role=='Admin'"><a href="" title="Edit"><span class="glyphicon glyphicon-pencil" ng-click="editStock(stock);editStockInfo=!editStockInfo;"></span> </a> <a href="" title="Delete"><span class="glyphicon glyphicon-trash"  ng-click="deleteStock(stock)"></span></a>
+	                    		 		<td ng-show="compType==2">{{stock.expiryDate | date:'dd/MM/yyyy'}}</td>
+	                    		 		<td>{{stock.arrivalDate | date:'dd/MM/yyyy'}}</td>
+	                    		 		<td ng-show="compType==1">{{stock.godownAddress}}</td>
+	                    		 		<td>{{stock.updOn | date:'dd/MM/yyyy'}}</td>
+	                    		 		<td ng-show="role=='Admin'"><a href="" title="Edit" ng-class="{disabled:{{stock.noOfDaysDiff > 7}}}"><span class="glyphicon glyphicon-pencil"  ng-click="editStock(stock);"></span> </a> <a href="" title="Delete"><span class="glyphicon glyphicon-trash" ng-class="{disabled:{{stock.noOfDaysDiff > 7}}}" ng-click="deleteStock(stock)"></span></a>
 	                    		 		<a href="" title="Print"><span class="glyphicon glyphicon-print"  ng-click="printStock(stock)"></span></a></td>
 	                    		 	
 	                    		 	</tr>

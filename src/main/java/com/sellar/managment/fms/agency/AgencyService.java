@@ -12,7 +12,7 @@ public interface AgencyService {
 	
 	List<AgencyDetail> getAllAgencyList();
 	
-	AgencyDetailWrapper getAgencyDetailByAgencyId(String agencyId);
+	AgencyDetailWrapper getAgencyDetailByAgencyId(Integer agencyId);
 
 	void deletAgencyDetail(AgencyDetail agencyDetail);
 	

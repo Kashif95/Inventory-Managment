@@ -14,7 +14,7 @@ import com.sellar.managment.fms.transaction.domain.PaymentDetail;
  */
 public interface PaymentService {
 
-	void saveTransactionDetail(PaymentDetail payment);
+	void saveTransactionDetail(PaymentDetail payment,String userName);
 
 	List<PaymentDetail> getPaymentInfoByOrderId(int orderId);
 

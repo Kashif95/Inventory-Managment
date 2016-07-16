@@ -4,7 +4,7 @@
       <meta charset="utf-8">
 	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <title >Pasad Fertilizer</title>
+	  <title >Prasad Fertilizer</title>
 	 <!--  <link rel="shortcut icon" href="../images/favicon.ico" type="image/ico" /> -->
 	  <link rel="stylesheet" type="text/css" href="../../css/jquery-ui.css" media="all" />
 	  <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css" media="all" />
@@ -12,47 +12,47 @@
  </head>
     
 <body data-ng-app="globalMod">
+	
 		<div class="container-fluid" id="mainBody" data-ng-controller="globalCtrl" >
-			 <nav class="navbar  navbar-fixed-top" role="navigation">
-			 		<div ng-class="{'container':isAdmin, 'customCont':!isAdmin}">
-			 		 <div class="navbar-header pull-left">
-			 			 <logo-fms></logo-fms>
-			 		 </div>
-			 		 <div class="navbar-header pull-right">
-			                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			 <nav class="navbar navbar-default navbar-fixed-top " role="navigation">
+			 		<div class="container">
+			 		 <div class="navbar-header">
+			                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainMenu">
 			                    <span class="sr-only">Toggle navigation</span>
 			                    <span class="icon-bar"></span>
 			                    <span class="icon-bar"></span>
 			                    <span class="icon-bar"></span>
 			                </button>
+			                 <div class="pull-left">
+			 						 <logo-fms></logo-fms>
+			 		 		</div>
             		</div>
-						 <div class="collapse navbar-collapse pull-right">        
+            		
+						 <div class="navbar-collapse collapse pull-right" id="mainMenu">        
 							 <ul class="nav navbar-nav" data-ng-controller="menuCtrl"> 
-	                              <li class="active dropdown" id ="home"><a href="#inventory" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-home"></span>Home
+	                              <li class="dropdown" id ="home"><a href="#saleOrder" class="dropdown-toggle" data-toggle="dropdown" ng-click="makeMeActive('home')"><span class="glyphicon glyphicon-home"></span>Home
 	                              	<span ng-show="role=='Admin'" class="caret"></span></a>
 										    <ul ng-show="role=='Admin'" class="dropdown-menu">
-										     	 <!-- <li class="" id ="inventory"><a href="#inventory"><span class="glyphicon glyphicon-list-alt"></span>Stock</a></li> -->
-       										 	 <li ng-show="role=='Admin'" id = "saleOrder"><a href="#saleOrder"><span class="glyphicon glyphicon-star"></span>Sell</a></li>
-      							 				 <li ng-show="role=='Admin'" id = "user"><a href="#user"><span class="glyphicon glyphicon-user"></span>User</a></li> 
+       										 	 <!-- <li ng-show="role=='Admin'" id = "saleOrder"><a href="#saleOrder" ng-click="makeMeActive('saleOrder')"><span class="glyphicon glyphicon-star"></span>Sell</a></li> -->
+      							 				 <li ng-show="role=='Admin'" id = "user"><a href="#user" ng-click="makeMeActive('user')"><span class="glyphicon glyphicon-user"></span>User</a></li> 
 										    </ul>
 										    
 	                              </li>
-       							  <li id = "agency"><a href="#agency"><span class="glyphicon glyphicon-star"></span>Agency</a></li>
-      							  <li id = "retailer"><a href="#retailer"><span class="glyphicon glyphicon-user"></span>Retailer</a></li> 
-        						  <li id ="products"><a href="#products"><span class="glyphicon glyphicon-leaf"></span>Product</a></li> 
-        						  <li ng-show="role=='Admin'" id ="reports"><a href="#reports"><span class="glyphicon glyphicon-list-alt"></span>Reports</a></li> 
-							</ul>	
-							<ul class="nav navbar-nav">
-						          <li class="dropdown" id="logout">
-						            <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin"><span class="glyphicon glyphicon-user"></span><b>{{userName}}</b></a>
+       							  <li id = "agency"><a href="#agency" ng-click="makeMeActive('agency')"><span class="glyphicon glyphicon-star"></span>Agency</a></li>
+      							  <li id = "retailer"><a href="#retailer" ng-click="makeMeActive('retailer')"><span class="glyphicon glyphicon-user"></span>Retailer</a></li> 
+        						  <li id ="products"><a href="#products" ng-click="makeMeActive('products')"><span class="glyphicon glyphicon-leaf"></span>Product</a></li> 
+        						  <li id ="stock"><a href="#inventory" ng-click="makeMeActive('stock')"><span class="glyphicon glyphicon-star"></span>Stock</a></li> 
+        						  <li ng-show="role=='Admin'" id ="reports" ng-click="makeMeActive('reports')"><a href="#reports"><span class="glyphicon glyphicon-list-alt"></span>Reports</a></li> 
+        						  <li class="dropdown" id="logout">
+						            <a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false" id="navLogin"><span class="glyphicon glyphicon-user"></span><b>{{userName}}</b></a>
 						            	 <ul class="dropdown-menu">
 						            	 	<li><a ng-click="logout()" href=""><span class="glyphicon glyphicon-off"></span>Log Out</a></li>
 						            	 </ul>
 						          </li>
-						    </ul>
+							</ul>	
+							
 					</div>
-					<!-- <div align="right" class="userName"><span class="glyphicon glyphicon-user"><h3>{{userName}}</h3><a ng-click="logout()" href="">Log Out</a></span></div>	 -->
-				</div>	
+				</div>
 			 </nav>
 	<div class="container-fluid" id="bodyCon" >	
 		

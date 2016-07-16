@@ -38,7 +38,7 @@ public class RetailerServiceImpl implements RetailerService{
 	public void saveRetailerDetail(RetailerDetailWrapper retailer,String userName) {
 		
 		RetailerDetail retailerDetail = null;
-		if(retailer.getRetailerId()==null){
+		if(retailer.getRetailerId()==0){
 			 retailerDetail = new RetailerDetail();
 			 retailerDetail.setCreatedOn(new Date());
 			retailerDetail.setCreatedBy(userName);
@@ -60,7 +60,7 @@ public class RetailerServiceImpl implements RetailerService{
 		retailerDetail.setEmail(retailer.getEmail());
 		
 		AddressDetail addressDetail = null;
-		if(retailer.getAddressId()==null){
+		if(retailer.getAddressId()==0){
 			 addressDetail = new AddressDetail();
 			 addressDetail.setCreatedOn(new Date());
 			 addressDetail.setCreatedBy(userName);
@@ -104,7 +104,7 @@ public class RetailerServiceImpl implements RetailerService{
 	}
 
 	@Override
-	public RetailerDetail getRetailerDetailByRetailerId(String retailerId) {
+	public RetailerDetail getRetailerDetailByRetailerId(int retailerId) {
 		// TODO Auto-generated method stub
 		return retailDao.getRetailerDetailByRetailerId(retailerId);
 	}

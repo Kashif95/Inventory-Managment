@@ -9,8 +9,10 @@ Currently I am working on to converting this app to mobile app.
 Create a SQL database  and run all script to build your databse.
 Run mvn clean install.
 
-Hit below URL:
+Hit below URL to get the understanding about site:
 
 http://pf-rakhitest.rhcloud.com/inventory/login
+
+
 UserName: 1234567890
 Password: TestUser

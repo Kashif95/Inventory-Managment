@@ -11,16 +11,27 @@ import java.util.Random;
  */
 public class FPSUtility {
 	
-	public static final String OrderNumConstant = "MO";
+	public static final String MEDICAL_ORDER_NUM = "MO";
+	public static final String FERTILIZER_ORDER_NUM = "PFO";
 	
-	public static String generateOrderId(Integer orderId) {
+	
+	public static String generateOrderNumber(Integer orderId,Short compType) {
+		
+		String newOrderNum = null;
 		if(orderId==null){
 			orderId = 100;
 		}
 		else{
 			orderId = orderId+1;
 		}
-	  String newOrderNum = OrderNumConstant+orderId.toString();
+	
+		if(compType==FMSConstant.FERTILIZER_COMP_TYPE){
+			newOrderNum = FERTILIZER_ORDER_NUM+orderId.toString();
+		}
+		else{
+			newOrderNum = MEDICAL_ORDER_NUM+orderId.toString();
+		}
+	   
 	return newOrderNum;
 	}
 

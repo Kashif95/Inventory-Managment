@@ -4,13 +4,9 @@
 package com.sellar.managment.medicine.order;
 
 import java.util.List;
+import java.util.Map;
 
-import com.sellar.managment.fms.order.domain.GeneratedOrderDetails;
-import com.sellar.managment.fms.order.domain.OrderDetail;
-import com.sellar.managment.fms.order.domain.OrderWrapper;
 import com.sellar.managment.fms.order.domain.OrderedProduct;
-import com.sellar.managment.fms.transaction.domain.PaymentDetail;
-import com.sellar.managment.medicine.order.domain.GeneratedMedicalOrderDetails;
 import com.sellar.managment.medicine.order.domain.MedicineOrderDetail;
 import com.sellar.managment.medicine.order.domain.MedicineOrderWrapper;
 
@@ -20,7 +16,7 @@ import com.sellar.managment.medicine.order.domain.MedicineOrderWrapper;
  */
 public interface OrderService {
 
-	void saveOrderDetail(MedicineOrderWrapper orderWrapper, Short compType);
+	void saveOrderDetail(MedicineOrderWrapper orderWrapper, Map userMap);
 
 	List<MedicineOrderWrapper> getOrderDetailsList();
 
@@ -32,7 +28,7 @@ public interface OrderService {
 
 	void cancelOrderByOrderId(int orderId, Short compType);
 
-	String getOrderNumber();
+	String getOrderNumber(Short compType);
 
 
 }

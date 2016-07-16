@@ -1,8 +1,6 @@
 var globalMod = angular.module('globalMod', ['ngRoute','UIMod','angularUtils.directives.dirPagination','ui.bootstrap','loginMod','angulartics', 'angulartics.google.analytics']);
 
-
-
-globalMod.controller('globalCtrl',function($scope,sessionService){
+globalMod.controller('globalCtrl',function($scope,sessionService,menuService){
 	
 	var session = JSON.parse(sessionStorage.getItem("session"));
 	$scope.userName = session.userName;
@@ -17,35 +15,63 @@ globalMod.controller('globalCtrl',function($scope,sessionService){
 	$scope.sort = function(keyname){
         $scope.sortKey = keyname;   //set the sortKey to the param passed
         $scope.reverse = !$scope.reverse; //if true make it false and vice versa
-  }
+  };
 	$scope.isLoggedIn = sessionService.isLoggedIn();
     $scope.logout = function(){
     	sessionService.logout();
-    }
+    };
+    
+    menuService.makeMenuActive();
+   $scope.makeMeActive = function(menuId){
+	   var currentActiveMenu = menuService.getActiveMenuName();
+	   menuService.makeMenuInactive(currentActiveMenu);
+	   menuService.setActiveMenuName(menuId);
+	   menuService.makeMenuActive();
+	   
+   };
 
 });
-globalMod.service('globalService',function(MenuService){
+globalMod.service('globalService',function(menuService){
 	
-	
-	
-});
-
-
-globalMod.controller('menuCtrl',function($scope,MenuService){
-
-	
-
-});
-
-globalMod.service('MenuService',function(){
-
 	
 	
 });
+
+
+globalMod.controller('menuCtrl',function($scope,menuService){
+	
+	
+
+});
+
+globalMod.service('menuService',function(){
+	
+	var activeMenuName = "home";
+
+	this.makeMenuActive = function(){
+		var activeMenu = sessionStorage.getItem("activeMenu");
+		if(activeMenu==null || activeMenu == "undefined"){
+			activeMenu = activeMenuName;
+		}
+		document.getElementById(activeMenu).className ="active";
+	};
+	this.makeMenuInactive = function(menuId){
+		document.getElementById(menuId).className =" ";
+	};
+	this.setActiveMenuName = function(menuName){
+		activeMenuName = menuName;
+		sessionStorage.setItem("activeMenu", menuName);
+	};
+	
+	this.getActiveMenuName = function(){
+		return activeMenuName;
+	};
+});
+
+
 globalMod.controller('agencyCtrl',function($scope,agencyService){
 
 	var globalScope = angular.element(document.getElementById('mainBody')).scope();
-	
 	var session = JSON.parse(sessionStorage.getItem("session"));
 	$scope.role = session.userRole;
 	
@@ -54,7 +80,6 @@ globalMod.controller('agencyCtrl',function($scope,agencyService){
 	});
 	
 	//globalScope.Title = "Agency";
-	document.getElementById('agency').className ="active";
 	$scope.saveAgency = function(){
 		var mobileNum = $scope.agency.mobileNumber;
 		if(mobileNum.length==10){
@@ -363,6 +388,7 @@ globalMod.controller('productsCtrl',function($scope,agencyService,productsServic
 	
 	 productsService.getProductTypeList().then(function(data){
 			$scope.productTypeList = data;
+			
 		});
 	
     productsService.getProductList().then(function(data){
@@ -379,7 +405,10 @@ globalMod.controller('productsCtrl',function($scope,agencyService,productsServic
     	product.productName = "";
     	product.productTypeId=null;
     	$scope.product = product;
-    }
+    	$scope.product.agencyId = $scope.agencyList[0].agencyId;
+    	$scope.product.productTypeId = $scope.productTypeList[0].typeId;
+    	
+    };
     
     $scope.editProduct = function(product){
 		
@@ -415,7 +444,7 @@ globalMod.controller('productsCtrl',function($scope,agencyService,productsServic
     
     
 	var globalScope = angular.element(document.getElementById('mainBody')).scope();
-	document.getElementById('products').className ="active"
+	//document.getElementById('products').className ="active"
 });
 
 globalMod.service('productsService',function($http){
@@ -532,18 +561,31 @@ globalMod.service('productsService',function($http){
 globalMod.controller('inventoryCtrl',function($scope,agencyService,productsService,inventoryService){
 
     
-	  $scope.opened = false;
-		//Datepicker
-		$scope.dateOptions = {
-			'year-format': "'yy'",
-			'show-weeks' : false
-		};
+	$( "#invoiceDate" ).datepicker({
+		dateFormat: 'dd/mm/yy',
+		maxDate: 0});
+	
+	$( "#challanDate" ).datepicker({
+		dateFormat: 'dd/mm/yy',
+		maxDate: 0});
+	$( "#dueDate" ).datepicker({
+		dateFormat: 'dd/mm/yy',
+		maxDate: 0});
+	$( "#arrivalDate" ).datepicker({
+		dateFormat: 'dd/mm/yy',
+		maxDate: 0});
     
     agencyService.getAgencyList().then(function(data){
 		$scope.agencyList = data;
 	});
     
     inventoryService.getStockList().then(function(data){
+		for(var i =0;i<data.length;i++){
+			var createdDate = new Date(data[i].updOn);
+			var todaysDate = new Date();
+			var noOfDaysDiff = (todaysDate - createdDate) / (1000 * 60 * 60 * 24);
+			data[i].noOfDaysDiff = noOfDaysDiff;
+		}
 		$scope.stockList = data;
 	});
     
@@ -557,37 +599,84 @@ globalMod.controller('inventoryCtrl',function($scope,agencyService,productsServi
     	}
     	if(agencyId!=undefined && agencyId!=null){
     		
-    		productsService.getProductListByAgencyId(agencyId).then(function(data){
-        		$scope.productList = data;
-        	});
+    		$scope.populateProductByAgencyId(agencyId);
     	}
     	
-    }
+    };
+    $scope.populateProductByAgencyId = function(agencyId){
+    	productsService.getProductListByAgencyId(agencyId).then(function(data){
+    		$scope.productList = data;
+    		$scope.stock.productId = $scope.productList[0].productId;
+    		$scope.updateQuantityByProductId($scope.stock.productId);
+    	});
+    };
+    
+    $scope.updateQuantity = function(){
+    	var productId = $scope.stock.productId;
+    	if(productId=="" || productId==undefined){
+    		$scope.stock.quantity  = 0;
+    	}
+    	else{
+    		$scope.updateQuantityByProductId(productId);
+    	}
+    	
+    };
+    
+    $scope.updateQuantityByProductId = function(productId){
+    	inventoryService.getStockQuantity(productId).then(function(data){
+    		$scope.stock.quantity = data;
+    	});
+    };
     $scope.addStock =  function(){
     	$scope.qunatityToAdd = "";
-		$scope.qunatityToRemove = 0;
     	var stock = {};
     	stock.agencyId = null;
     	stock.productId = null;
+    	stock.godownAddress="";
     	stock.quantity = 0;
     	stock.costPrice = "";
     	stock.sellingPrice = "";
     	stock.arrivalDate= "";
     	$scope.stock = stock;
-    }
+    	$scope.stock.agencyId = $scope.agencyList[0].agencyId;
+    	$scope.populateProductByAgencyId($scope.stock.agencyId);
+    	
+    	var stockMisc = {};
+    	stockMisc.invoiceNumber = "";
+    	stockMisc.invoiceDate="";
+    	stockMisc.dueDate="";
+    	stockMisc.challanNumber="";
+    	stockMisc.challanDate="";
+    	stockMisc.doNumber="";
+    	$scope.stockMisc = stockMisc;
+    };
     $scope.editStock = function(stock){
     	
-    	productsService.getProductListByAgencyId(stock.agencyId).then(function(data){
-    		$scope.productList = data;
-    	});
+    	
+    	if(stock.noOfDaysDiff < 7){
+    		$scope.addStockInfo = true;
+    		productsService.getProductListByAgencyId(stock.agencyId).then(function(data){
+        		$scope.productList = data;
+        	});
+    		
+        	$scope.qunatityToAdd = "0";
+        	var stockDetails = inventoryService.editStock(stock);
+    		$scope.stock = stockDetails.stock;
+    		$scope.stockMisc = stockDetails.stockMisc;
+    	}	
+    	
 		
-    	$scope.qunatityToAdd = "";
-		$scope.qunatityToRemove = "";
-		$scope.stock = inventoryService.editStock(stock);
-		$scope.addStockInfo = true;
-		$scope.editStockInfo = true;
-		
-    } 
+    }; 
+    
+    $scope.deleteStock = function(stock){
+    	
+    	if(stock.noOfDaysDiff < 7){	
+	    	inventoryService.deleteProductStock(stock).then(function(data){
+	    		
+	    		$scope.stockList = data;
+	    	});
+    	}	
+    }
     
     $scope.saveProductStock = function(){
     	
@@ -597,14 +686,14 @@ globalMod.controller('inventoryCtrl',function($scope,agencyService,productsServi
     	}
     	else{
     		
-    		if($scope.quantityToRemove==undefined || $scope.quantityToRemove==" "){
+    		/*if($scope.quantityToRemove==undefined || $scope.quantityToRemove==" "){
     			$scope.quantityToRemove = 0;
-    		}
+    		}*/
     		if($scope.quantityToAdd==undefined || $scope.quantityToAdd==" "){
     			$scope.quantityToAdd = 0;
     		}
-    		$scope.stock.quantity= parseInt($scope.stock.quantity)+parseInt($scope.quantityToAdd)-parseInt($scope.quantityToRemove);
-    		inventoryService.saveProductStock($scope.stock).then(function(data){
+    		$scope.stock.quantity= parseInt($scope.stock.quantity)+parseInt($scope.quantityToAdd);
+    		inventoryService.saveProductStock($scope.stock,$scope.stockMisc).then(function(data){
     			
     			$scope.addStockInfo = !$scope.addStockInfo;
     			$scope.stockList = data;
@@ -621,7 +710,9 @@ globalMod.controller('inventoryCtrl',function($scope,agencyService,productsServi
 globalMod.service('inventoryService',function($http){
 	
 	var productList = null;
-	var stock = {};
+	var stockDetails = {};
+	var stockList = {};
+	var stockQuan = 0;
 	this.getStockList = function(){
 		
 		var url = '../../../stock/getStockList';
@@ -631,46 +722,111 @@ globalMod.service('inventoryService',function($http){
 			
 		});
 		return stockList;
-	}
-	this.setStockList = function(stockList){
-		
-		this.stockList = stockList;
-	}
+	};
 	
-	this.getStock = function(){
-		return stock;
-	}
-	
-	this.setStock = function(stock){
+	this.deleteProductStock = function(stock){
 		
-		this.stock = stock;
-	}
-	
-	this.editStock = function(stockObj){
-		
-		stock.agencyId = stockObj.agencyId;
-    	stock.productId = stockObj.productId;
-    	stock.quantity = stockObj.quantity;
-    	stock.costPrice = stockObj.costPrice;
-    	stock.sellingPrice = stockObj.sellingPrice;
-    	stock.arrivalDate= stockObj.arrivalDate;
-    	stock.productStockId = stockObj.productStockId;
-    	
-		return stock;
-	}
-	
-	this.saveProductStock = function(stock){
-		
-		var url = '../../../stock/saveStock';
-		stock.costPrice = parseFloat(stock.costPrice);
-		stock.sellingPrice = parseFloat(stock.sellingPrice);
+		var url = '../../../stock/deleteStock';
 		stockList =  $http.put(url,stock).then(function(response){
 			
 			return response.data;
 			
 		});
 		return stockList;
-	}
+	};
+	this.setStockList = function(stockList){
+		
+		this.stockList = stockList;
+	};
+	
+	this.getStock = function(){
+		return stock;
+	};
+	
+	this.setStock = function(stock){
+		
+		this.stock = stock;
+	};
+	
+	this.getStockQuantity = function(productId){
+		
+		var url = '../../../stock/getStockTotalQuantity/'+productId;
+		stockQuan =  $http.get(url).then(function(response){
+			
+			return response.data;
+			
+		});
+		return stockQuan;
+	};
+	
+	this.editStock = function(stockObj){
+		
+		var stockMisc = {};
+		var stock = {};
+		
+		if(stockObj.stockMiscDetail==null || stockObj.stockMiscDetail==""){
+			stockObj.stockMiscDetail = "";
+			stockMisc.invoiceDate="";
+			stockMisc.dueDate="";
+			stockMisc.doNumber="";
+			stockMisc.challanNumber="";
+			stockMisc.challanDate="";
+			
+			
+		}
+		else{
+			stockMisc.invoiceNumber = stockObj.stockMiscDetail.invoiceNumber;
+			var invDate = new Date(stockObj.stockMiscDetail.invoiceDate);
+			stockMisc.invoiceDate= invDate.getDate() + '/' + (invDate.getMonth()+1) + '/' + invDate.getFullYear();
+			var due = new Date(stockObj.stockMiscDetail.dueDate);
+			stockMisc.dueDate= due.getDate() + '/' + (due.getMonth()+1) + '/' + due.getFullYear();
+			stockMisc.doNumber=stockObj.stockMiscDetail.doNumber;
+			stockMisc.challanNumber=stockObj.stockMiscDetail.challanNumber;
+			var challD = new Date(stockObj.stockMiscDetail.challanDate);
+			stockMisc.challanDate = challD.getDate() + '/' + (challD.getMonth()+1) + '/' + challD.getFullYear();
+			stockMisc.stockId = stockObj.productStockId;
+		}
+		
+		stock.agencyId = stockObj.agencyId;
+    	stock.productId = stockObj.productId;
+    	stock.quantity = stockObj.quantity;
+    	stock.costPrice = stockObj.costPrice;
+    	stock.sellingPrice = stockObj.sellingPrice;
+    	var arrDa = new Date(stockObj.arrivalDate);
+    	stock.arrivalDate= arrDa.getDate() + '/' + (arrDa.getMonth()+1) + '/' + arrDa.getFullYear();
+    	stock.godownAddress=stockObj.godownAddress;
+    	stock.productStockId = stockObj.productStockId;
+    	stockDetails.stockMisc = stockMisc;
+    	stockDetails.stock = stock;
+		return stockDetails;
+	};
+	
+	this.saveProductStock = function(stock,stockMisc){
+		
+		var url = '../../../stock/saveStock';
+		stock.costPrice = parseFloat(stock.costPrice);
+		stock.sellingPrice = parseFloat(stock.sellingPrice);
+		var stockDetails = 'stock='+JSON.stringify(stock)+'&misc='+JSON.stringify(stockMisc);
+		stockList = $http.get(url+'?'+stockDetails).then(function(response){
+			
+			return response.data;
+		},
+		function (httpError) {
+			                 throw httpError.status + " : " + 
+			                       httpError.data;
+			              }
+		);
+			/*success(function (data, status, headers, config) {
+            stockList = data;
+        })
+        .error(function (data, status, header, config) {
+            var ResponseDetails = "Data: " + data +
+                "<hr />status: " + status +
+                "<hr />headers: " + header +
+                "<hr />config: " + config;
+        });*/
+		return stockList;
+	};
 	
 	this.getStockListBySearchTerm = function(productSearchKey){
 		var url = '../../../stock/getProductList?prodSearchKey='+productSearchKey;
@@ -799,6 +955,7 @@ globalMod.controller('saleOrderCtrl',function($scope,inventoryService,retailerSe
 		$scope.generatedOrderList = data;
 	});
 	
+	
 	$scope.isProductAdded = true;
 	$scope.product = orderService.getSearchedProduct();
 	
@@ -912,13 +1069,13 @@ globalMod.controller('saleOrderCtrl',function($scope,inventoryService,retailerSe
 	};
 	
 	$scope.saveOrderDetails = function(){
-		orderService.saveOrderDetails($scope.order,$scope.transaction);
+		orderService.saveOrderDetails($scope.order,$scope.transaction,$scope.transport);
 	};
 	$scope.showProductDetails = function(orderedProduct){
 		
 		orderService.getPopup("product",orderedProduct);
 		
-	}
+	};
 	$scope.showPaymentDetails = function(transactions,order){
 		
 		$scope.paymentList = transactions;
@@ -926,10 +1083,32 @@ globalMod.controller('saleOrderCtrl',function($scope,inventoryService,retailerSe
 		$scope.payorderId= order.orderId;
 		
 		
+	};
+	$scope.showtransport = function(transport){
+		
+		orderService.getPopup("transport",transport);
+		
 	}
+	
 	$scope.hidePopup = function(){
 		orderService.hidePopup();
 		
+	};
+	
+	$scope.continueAction = function(){
+		orderService.hidePopup();
+		orderService.getGeneratedOrderList().then(function(data){
+			$scope.generatedOrderList = data;
+		});
+		$scope.isNewOrder = !$scope.isNewOrder;
+		
+	};
+	
+	$scope.continueToCancelOrder = function(orderId){
+		orderService.hidePopup();
+		orderService.cancelOrder(orderId).then(function(data){
+			$scope.generatedOrderList = data;
+		});
 	}
 	$scope.updatePayment = function(){
 		var details = {};
@@ -955,12 +1134,10 @@ globalMod.controller('saleOrderCtrl',function($scope,inventoryService,retailerSe
 			});
 			
 		}
-	}
+	};
 	$scope.cancelOrder = function(orderId){
-		orderService.cancelOrder(orderId).then(function(data){
-			$scope.generatedOrderList = data;
-		});	
-	}
+			orderService.getPopup("cancelOrder",orderId);
+	};
 	
 });
 
@@ -980,6 +1157,8 @@ globalMod.service('orderService',function($http,LoadConf){
 	}
 	var transaction = {};
 	
+	//var transport = {};
+	
 	this.getTransaction = function(){
 		transaction.amountPaid = 0;
 		transaction.transactionDate="";
@@ -992,6 +1171,8 @@ globalMod.service('orderService',function($http,LoadConf){
 		
 		this.transaction = transaction;
 	};
+	
+	
 	this.setSearchedProduct = function(product){
 		this.searchedProduct = product;
 		var orderScope = angular.element(document.getElementById('fmsSaleOrder')).scope();
@@ -1011,8 +1192,23 @@ globalMod.service('orderService',function($http,LoadConf){
 		orderScope.$apply();
 	};
 	
+	this.getOrderNumber = function(){
+		
+		var url = '../../../order/getOrderNumber';
+		orderNumber =  $http.get(url).then(function(response){
+			
+			return response.data.orderNum;
+			
+		});
+		return orderNumber;
+	}
 	
-	this.saveOrderDetails = function(order,transaction){
+	this.setOrderNumber = function(orderNumber){
+		
+		this.orderNumber = orderNumber;
+	};
+	
+	this.saveOrderDetails = function(order,transaction,transport){
 		
 		var selectedProductList = JSON.parse(sessionStorage.getItem('selectedProductList'));
 		var orderedProductList = [];
@@ -1026,10 +1222,20 @@ globalMod.service('orderService',function($http,LoadConf){
 		}
 		var selectedRetailer = JSON.parse(sessionStorage.getItem('selectedRetailer'));
 		
+		var tranportDetail = {};
+		tranportDetail.sourceLoaction = transport.sourceLoc;
+		tranportDetail.destinationLocation = transport.destinationLoc;
+		tranportDetail.vehicleNumber = transport.vehicleNum;
+		tranportDetail.transportMode = transport.transportMode;
+		tranportDetail.transporterAddress = transport.transporterAddress;
+		tranportDetail.mobileNumber = transport.mobileNumber;
+		
+		
 		order.retailerId = parseInt(selectedRetailer.retailerId);
 		var orderDetails = {};
 		orderDetails.order = order;
 		orderDetails.orderedProductList = orderedProductList;
+		orderDetails.transportDetail = tranportDetail;
 		var self  = this;
 		var url = '../../../order/saveOrderDetails';
 		$http.put(url,orderDetails).then(function(response){
@@ -1100,10 +1306,16 @@ globalMod.service('orderService',function($http,LoadConf){
 					orderScope.paymentList = details;
 				}
 				
-			}else{
+			}else if(popupType=='updatePayment'){
 				
 				orderScope.pendingAmount = details.pendingorderPrice;
+			}else if(popupType=='transport'){
+				orderScope.tranport = details;
+			}else if(popupType=='cancelOrder'){
+				
+				orderScope.orderId = details;
 			}
+			
 			
 			
 		});

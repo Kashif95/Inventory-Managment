@@ -19,7 +19,6 @@ public class MedicineOrderWrapper {
 		
 	private List<OrderedProduct> orderedProductList;
 	
-	//private PaymentDetail payment;
 
 
 	/**

@@ -7,11 +7,13 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sellar.managment.fms.inventory.domain.ProductStock;
+import com.sellar.managment.fms.inventory.domain.ProductStockMiscDetails;
 
 /**
  * @author rakumari
@@ -26,7 +28,6 @@ public class InventoryDAOImpl implements InventoryDAO{
 
 	@Override
 	public void saveStockDetails(ProductStock stock) {
-		// TODO Auto-generated method stub
 		sessionFactory.getCurrentSession().saveOrUpdate(stock);
 	}
 
@@ -65,7 +66,31 @@ public class InventoryDAOImpl implements InventoryDAO{
 	@Override
 	public void deleteStock(ProductStock stock) {
 		// TODO Auto-generated method stub
+		sessionFactory.getCurrentSession().delete(stock.getStockMiscDetail());
 		sessionFactory.getCurrentSession().delete(stock);
+	}
+
+	@Override
+	public void saveStockMiscDetails(ProductStockMiscDetails misc) {
+		// TODO Auto-generated method stub
+		sessionFactory.getCurrentSession().saveOrUpdate(misc);
+	}
+
+	@Override
+	public List<ProductStockMiscDetails> getProductStockMiscDetailsList() {
+		Query query = sessionFactory.getCurrentSession().createQuery(
+                "from ProductStockMiscDetails");
+        return query.list();
+	}
+
+	@Override
+	public Integer getTotalStockQuantityByProductId(int productId) {
+		// TODO Auto-generated method stub
+		String sqlQuery = "SELECT SUM(Quantity) AS TotalQunat FROM ProductStock WHERE ProductId ="+productId;
+		Integer qunatity = (Integer) sessionFactory.getCurrentSession().createSQLQuery(sqlQuery).
+		addScalar("TotalQunat", new IntegerType())
+		.uniqueResult();
+		return qunatity;
 	}
 	
 

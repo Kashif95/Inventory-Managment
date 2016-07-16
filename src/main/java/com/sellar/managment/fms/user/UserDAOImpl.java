@@ -32,7 +32,7 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public AddressDetail getAddressByAddressId(String addressId) {
+	public AddressDetail getAddressByAddressId(int addressId) {
 		// TODO Auto-generated method stub
 		Query query  = sessionFactory.getCurrentSession().createQuery("from AddressDetail where addressId = :addressId");
 		query.setParameter("addressId", addressId);

@@ -8,25 +8,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.omg.IOP.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.sellar.managment.fms.inventory.InventoryService;
 import com.sellar.managment.fms.inventory.domain.ProductStock;
-import com.sellar.managment.fms.order.domain.GeneratedOrderDetails;
-import com.sellar.managment.fms.order.domain.OrderDetail;
-import com.sellar.managment.fms.order.domain.OrderWrapper;
 import com.sellar.managment.fms.order.domain.OrderedProduct;
-import com.sellar.managment.fms.transaction.PaymentService;
-import com.sellar.managment.fms.transaction.domain.PaymentDetail;
 import com.sellar.managment.fms.util.FMSConstant;
 import com.sellar.managment.fms.util.FPSUtility;
-import com.sellar.managment.medicine.order.domain.GeneratedMedicalOrderDetails;
 import com.sellar.managment.medicine.order.domain.MedicineOrderDetail;
 import com.sellar.managment.medicine.order.domain.MedicineOrderWrapper;
 
@@ -44,27 +34,27 @@ public class OrderServiceImpl implements OrderService{
 	@Autowired
 	InventoryService inventoryService;
 	
-	@Autowired
-	PaymentService paymentService;
 
 	@Override
-	public void saveOrderDetail(MedicineOrderWrapper orderWrapper,Short compType) {
+	public void saveOrderDetail(MedicineOrderWrapper orderWrapper,Map userMap) {
 		// TODO Auto-generated method stub
 		MedicineOrderDetail orderDetail = orderWrapper.getOrder();
+		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
+		String userName = (String)userMap.get(FMSConstant.USER_NAME);
 		
 		saveOrder(orderDetail);
 		
 		for(OrderedProduct product : orderWrapper.getOrderedProductList()){
 			product.setMedicineOrderId(orderDetail.getOrderId());
-			product.setCreatedBy("Admin");
-			product.setUpdBy("Admin");
+			product.setCreatedBy(userName);
+			product.setUpdBy(userName);
 			product.setCreatedOn(new Date());
 			product.setUpdOn(new Date());
 			orderDao.saveOrderdProduct(product);
 			ProductStock prodStock = inventoryService.getProductStockByStockId(product.getStockId());
 			float quantity = prodStock.getQuantity()-product.getQuantity();
 			prodStock.setQuantity(quantity);
-			inventoryService.saveStockDetails(prodStock,compType);
+			inventoryService.saveStockDetails(prodStock,compType,userName);
 		}
 		
 		
@@ -131,7 +121,7 @@ public class OrderServiceImpl implements OrderService{
 		for(OrderedProduct orderedProduct :  orderedProductList){
 			float updatedQuan = orderedProduct.getQuantity() + orderedProduct.getProductStock().getQuantity();
 			orderedProduct.getProductStock().setQuantity(updatedQuan);
-			inventoryService.saveStockDetails(orderedProduct.getProductStock(),compType);
+			inventoryService.saveStockDetails(orderedProduct.getProductStock(),compType,"Admin");
 			
 		}
 		order.setOrderStatusTypeId(FMSConstant.ORDERSTATUSTYPE_CANCELLED);
@@ -139,10 +129,10 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public String getOrderNumber() {
+	public String getOrderNumber(Short compType) {
 		// TODO Auto-generated method stub
 		Integer orderId = orderDao.getLastOrderId();
-		return FPSUtility.generateOrderId(orderId);
+		return FPSUtility.generateOrderNumber(orderId,compType);
 	}
 
 

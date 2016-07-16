@@ -6,6 +6,8 @@ package com.sellar.managment.fms.user;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.sellar.managment.fms.user.domain.AddressDetail;
 import com.sellar.managment.fms.user.domain.UserDetails;
 import com.sellar.managment.fms.user.domain.UserType;
@@ -18,7 +20,7 @@ public interface UserService {
 	
 	UserDetails getUserByUserId(String userId);
 	
-	AddressDetail getAddressByAddressId(String addressId);
+	AddressDetail getAddressByAddressId(int addressId);
 
 	List<UserType> getAllUserRoleList();
 	
@@ -30,6 +32,10 @@ public interface UserService {
 
 	UserDetails getUserByUserIdAndCompId(
 			String mobileNumber, Short compType);
+	
+	String getLoggedInUserName(HttpServletRequest request);
+	
+	Short getLoggedInUserCompType(HttpServletRequest request);
 
 
 }

@@ -27,10 +27,10 @@ public class PaymentServiceImpl implements PaymentService{
 	OrderService orderService;
 
 	@Override
-	public void saveTransactionDetail(PaymentDetail payment) {
+	public void saveTransactionDetail(PaymentDetail payment,String userName) {
 		// TODO Auto-generated method stub
-		payment.setCreatedBy("Admin");
-		payment.setUpdBy("Admin");
+		payment.setCreatedBy(userName);
+		payment.setUpdBy(userName);
 		payment.setCreatedOn(new Date());
 		payment.setUpdOn(new Date());
 		tranDao.saveTransactionDetail(payment);
@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService{
 		orderDetail.setPendingAmount(amountToBePaid);
 		if(amountToBePaid==0)
 			orderDetail.setPaymentStatus(true);
-		orderService.saveOrder(orderDetail);
+		orderService.saveOrder(orderDetail,userName);
 	}
 
 	@Override

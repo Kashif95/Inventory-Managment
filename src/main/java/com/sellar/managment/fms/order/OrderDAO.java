@@ -28,6 +28,10 @@ public interface OrderDAO {
 
 	void saveOrderTransportDetail(OrderTransportDetail transportDetail);
 
+	Integer getLastOrderId();
+
+	OrderTransportDetail getTransportDetailByOrderId(int orderId);
+
 
 
 }

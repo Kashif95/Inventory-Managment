@@ -17,7 +17,7 @@ public interface RetailerDAO {
 	
 	List<RetailerDetail> getAllRetailerList();
 	
-	RetailerDetail getRetailerDetailByRetailerId(String retailerId);
+	RetailerDetail getRetailerDetailByRetailerId(int retailerId);
 
 	void deleteRetailerDetail(RetailerDetail retailerDetail);
 

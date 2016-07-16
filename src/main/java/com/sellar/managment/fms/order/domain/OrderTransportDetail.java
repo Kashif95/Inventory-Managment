@@ -43,6 +43,12 @@ public class OrderTransportDetail {
 	@Column(name="TransportMode")
 	private String transportMode;
 	
+	@Column(name="TransporterAddress")
+	private String transporterAddress;
+	
+	@Column(name="MobileNumber")
+	private String mobileNumber;
+	
 	@JsonIgnore
 	@Column(name = "OTDCrd")
 	private Date createdOn;
@@ -198,6 +204,36 @@ public class OrderTransportDetail {
 	public void setUpdBy(String updBy) {
 		this.updBy = updBy;
 	}
+
+	/**
+	 * @return the transporterAddress
+	 */
+	public String getTransporterAddress() {
+		return transporterAddress;
+	}
+
+	/**
+	 * @param transporterAddress the transporterAddress to set
+	 */
+	public void setTransporterAddress(String transporterAddress) {
+		this.transporterAddress = transporterAddress;
+	}
+
+	/**
+	 * @return the mobileNumber
+	 */
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	/**
+	 * @param mobileNumber the mobileNumber to set
+	 */
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	
 	
 	
 	

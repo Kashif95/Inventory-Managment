@@ -13,7 +13,7 @@ public class ProductDetailWrapper {
 	
 	private String productName;
 	
-	private String productId;
+	private int productId;
 	
 	private short productTypeId;
 
@@ -48,14 +48,14 @@ public class ProductDetailWrapper {
 	/**
 	 * @return the productId
 	 */
-	public String getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 
 	/**
 	 * @param productId the productId to set
 	 */
-	public void setProductId(String productId) {
+	public void setProductId(int productId) {
 		this.productId = productId;
 	}
 

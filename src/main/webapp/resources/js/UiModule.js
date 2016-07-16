@@ -118,7 +118,7 @@ UIMod.directive('logoFms',function(){
 		restrict:"E",
 		template:'<div class="">'
 			  				+'<div class="header-logo">'+
-			  				'<a href="#"  class="navbar-brand" title="Prasad Fertilizer"><img src="../../images/tree-logo.jpg" alt="Prasad Fertilizer" class="img-responsive"/></a>'+
+			  				'<a href="#inventory"  class="navbar-brand" title="Prasad Fertilizer"><img src="../../images/tree-logo.jpg" alt="Prasad Fertilizer" class="img-responsive"/></a>'+
 			  				'</div> </div>'
 			
 			
@@ -259,9 +259,36 @@ UIMod.directive('loadPopup',function($compile){
                     		 	    '</tr>'+
                     	'</table></span>'+
 								 '</div>'+
-								'<div class = "buttons">'+
-								'<input type="button" class="btn btn-default" value="OK"  ng-click="hidePopup()" />'+
-								'</div></div>'
+								'<div class = "buttons pull-right">'+
+								'<input type="button" class="btn btn-success" value="OK"  ng-click="hidePopup()" />'+
+								'</div></div>';
+		
+		var transportTemplate = '<div>'+
+									'<div class = "popupCon">'+
+										'<h1 class="popup_heading">{{content.header}}'+
+										'</span></h1>'+
+										 '<span class="poopup_content">'+
+										 '<table   class="table table-striped table-hover">'+
+										 '<tr>'+
+											 '<th>Source</th>'+
+											 '<th>Destination</th>'+
+											 '<th>Vehicle Number</th>'+
+											 '<th>Transporter Name</th>'+
+											 '<th>Transport Mode</th>'+
+										'</tr>'+
+								 	    '<tr>'+
+								 		'<td>{{tranport.sourceLoaction}}</td>'+
+								 		'<td>{{tranport.destinationLocation}}</td>'+
+								 		'<td>{{tranport.vehicleNumber}}</td>'+
+								 		'<td>{{tranport.transporterAddress}}</td>'+
+								 		 '<td>{{tranport.transportMode}}</td>'+
+								 	
+								 	    '</tr>'+
+							'</table></span>'+
+									 '</div>'+
+									'<div class = "buttons">'+
+									'<input type="button" class="btn btn-default" value="OK"  ng-click="hidePopup()" />'+
+									'</div></div>';
 								
 		var paymentTemplate = '<div>'+
 								'<div class = "popupCon">'+
@@ -289,12 +316,19 @@ UIMod.directive('loadPopup',function($compile){
 								 '</div></div>'
 	    var orderTemplate =    '<div>'+
 	    							'<div class = "popupCon">'+
-	    								'<h1 class="popup_heading">{{content.header}} <span class="glyphicon glyphicon-remove pull-right" ng-click="cancel()"></span></h1>'+
+	    								'<h1 class="popup_heading">{{content.header}}</h1>'+
 	    								 '<span class="poopup_content">{{content.text}}</span>'+
 	    							 '</div>'+
-	    						'<div class = "buttons"><input type="button" class="btn btn-default btn-right-margin" value="Yes"  ng-click="continueAction()" />'+
-	    						'<input type="button" class="btn btn-default" value="No"  ng-click="cancel()" />'+
-	    						 '</div></div>'
+	    						'<div class = "buttons"><input type="button" class="btn btn-default btn-right-margin" value="Ok"  ng-click="continueAction()" />'+
+	    						 '</div></div>';
+		var cancelOrderTemplate =    '<div>'+
+										'<div class = "popupCon">'+
+											'<h1 class="popup_heading">{{content.header}}</h1>'+
+											 '<span class="poopup_content">{{content.text}}</span>'+
+										 '</div>'+
+									'<div class = "buttons"><input type="button" class="btn btn-default btn-right-margin" value="Yes"  ng-click="continueToCancelOrder(orderId)" />'+
+									'<input type="button" class="btn btn-default btn-right-margin" value="No"  ng-click="hidePopup()" />'+
+									 '</div></div>'
 	    var updatePaymentTemplate =  '<div>'+ 
 	    								'<div  class="panel panel-default">'+
 	    									'<div class="panel-heading"> <h2>{{content.header}}</h2> </div>'+
@@ -354,6 +388,12 @@ UIMod.directive('loadPopup',function($compile){
 	            case 'updatePayment':
 	            	template = updatePaymentTemplate;
 	                break; 
+	            case 'transport':
+	            	template = transportTemplate;
+	                break;  
+	            case 'cancelOrder':
+	            	template = cancelOrderTemplate;
+	                break;      
 	        }
 
 	        return template;

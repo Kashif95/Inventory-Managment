@@ -39,7 +39,7 @@ public class RetailerDAOImpl implements RetailerDAO{
 	}
 
 	@Override
-	public RetailerDetail getRetailerDetailByRetailerId(String retailerId) {
+	public RetailerDetail getRetailerDetailByRetailerId(int retailerId) {
 		// TODO Auto-generated method stub
 		RetailerDetail retailerDetail = (RetailerDetail) sessionFactory.getCurrentSession().get(RetailerDetail.class, retailerId);
 		return retailerDetail;

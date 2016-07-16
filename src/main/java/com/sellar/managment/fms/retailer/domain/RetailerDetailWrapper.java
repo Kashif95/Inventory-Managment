@@ -38,9 +38,9 @@ public class RetailerDetailWrapper {
 	
 	private String state;
 	
-	private String retailerId;
+	private int retailerId;
 	
-	private String addressId;
+	private int addressId;
 
 	
 
@@ -188,28 +188,28 @@ public class RetailerDetailWrapper {
 	/**
 	 * @return the retailerId
 	 */
-	public String getRetailerId() {
+	public int getRetailerId() {
 		return retailerId;
 	}
 
 	/**
 	 * @param retailerId the retailerId to set
 	 */
-	public void setRetailerId(String retailerId) {
+	public void setRetailerId(int retailerId) {
 		this.retailerId = retailerId;
 	}
 
 	/**
 	 * @return the addressId
 	 */
-	public String getAddressId() {
+	public int getAddressId() {
 		return addressId;
 	}
 
 	/**
 	 * @param addressId the addressId to set
 	 */
-	public void setAddressId(String addressId) {
+	public void setAddressId(int addressId) {
 		this.addressId = addressId;
 	}
 

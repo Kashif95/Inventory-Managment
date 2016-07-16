@@ -53,7 +53,7 @@ public class AgencyServiceImpl implements AgencyService {
 		
 		
 		AddressDetail addressDetail = null;
-		if(agency.getAddressId()==null){
+		if(agency.getAddressId()==0){
 			
 			 addressDetail = new AddressDetail();
 		}
@@ -83,7 +83,7 @@ public class AgencyServiceImpl implements AgencyService {
 	}
 
 	@Override
-	public AgencyDetailWrapper getAgencyDetailByAgencyId(String agencyId) {
+	public AgencyDetailWrapper getAgencyDetailByAgencyId(Integer agencyId) {
 		// TODO Auto-generated method stub
 		AgencyDetail agencyDetail = agencyDao.getAgencyDetailByAgencyId(agencyId);
 		AgencyDetailWrapper agency = new AgencyDetailWrapper();

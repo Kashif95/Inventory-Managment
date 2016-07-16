@@ -1,9 +1,9 @@
 <div class="container-fluid" id="fmsSaleOrder" data-ng-controller="saleOrderCtrl">
 	 <div class="row">
-	        <div class="col-xs-12 col-sm-8 col-md-offset-2" >
+	        <div class="col-xs-12 col-sm-9 col-md-offset-2" >
 	        	<div class="panel-group" id="accordion" ng-show="isNewOrder">
 	        		<div class="panel panel-default">
-	        			<div class="panel-heading"> <h2>Generate Sales order</h2>   </div>
+	        			<div class="panel-heading"> <h2>Generate Sale Order</h2>   </div>
 	        		</div>	
 	               	<div class="panel panel-default">	
 	               		<div class="panel-heading" data-toggle="collapse"  data-parent="#accordion" href="#searchAndAdd"> <h4>Search And Add Product</h4>   </div> 
@@ -106,18 +106,96 @@
 	               	    <div id="paymentInfo" class="collapse">	       
 	                      <div class="panel-body" >
 	                      		<form class="form-horizontal" role="form" name="orderForm" novalidate>
+	                      		<div class="form-group">
+			                        <label for="billNumber" class="col-sm-3 control-label">Order Challan Number:</label>
+			                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" name = "challanNum" ng-model="order.challanNumber" placeholder="Challan Number" maxlength = "50" required />
+	                            		
+		                            		<div class="help-inline">
+		                            		<span class="error" ng-show="orderForm.challanNum.$dirty && orderForm.challanNum.$invalid">
+											<span ng-show="orderForm.challanNum.$error.required">challan Number is required.</span></span>
+											</div>
+										</div>	
+			                            
+			                         <label for="billDate" class="col-sm-3 control-label">Challan Date:</label>
+			                            <div class="col-sm-3 ">
+	    									<div class="input-group">
+	    										<mydatepicker data-ng-model="order.challanDate" date-options="dateOptions" opened="opened"/>
+	    									</div>
+    									
+	                             </div>
+	                            </div> 
 	                    
 			                    	<div class="form-group">
 			                            <label for="retailerName" class="col-sm-3 control-label">Retailer Name:</label>
 			                            <label for="retailerName" class="col-sm-2 control-label">
 			                            	{{retailerName}} 
 			                            </label>
-			                            <label for="totalOrder" class="col-sm-3 control-label">Order price:</label>
+			                            <label for="totalOrder" class="col-sm-4 control-label">Order price:</label>
 			                            <label for="price" class="col-sm-2 control-label" id = "priceLabel">
 			                            	Rs. {{order.orderPrice}} 
 			                            </label>
 			                        </div>
+				                   <hr>
 			                        <div class="form-group">
+				                        <label for="dispatchFrom" class="col-sm-3 control-label">Dispatch From:</label>
+				                           <div class="col-sm-3" ng-class="{error:!orderForm.fromLoc.$valid}">
+	                                		<input type="text" class="form-control" name = "fromLoc" ng-model="transport.sourceLoc" placeholder="Place Name" maxlength = "50" required />
+	                            		
+		                            		<div class="help-inline">
+		                            		<span class="error" ng-show="orderForm.fromLoc.$dirty && orderForm.fromLoc.$invalid">
+											<span ng-show="orderForm.fromLoc.$error.required">Dispatch from location is required.</span></span>
+											</div>
+										</div>
+				                        <label for="receivedLoc" class="col-sm-2 control-label">To:</label>
+				                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" name="toLoc" ng-model="transport.destinationLoc" placeholder="Place Name" maxlength = "50" required />
+		                            		<div class="help-inline">
+		                            		 <span class="error" ng-show="orderForm.toLoc.$dirty && orderForm.toLoc.$invalid">
+											<span ng-show="orderForm.toLoc.$error.required">Dispatch  to locations is required.</span></span>
+											</div>
+										</div>	
+				                   </div> 
+				                   
+				                     <div class="form-group">
+				                      <label for="receivedLoc" class="col-sm-3 control-label">Transport Name:</label>
+				                           <div class="col-sm-3">
+	                                		<textarea class="form-control" name="transporterAdd" ng-model="transport.transporterAddress" placeholder="Transporter Address" maxlength = "100" required />
+		                            		<div class="help-inline">
+		                            		 <span class="error" ng-show="orderForm.transporterAdd.$dirty && orderForm.transporterAdd.$invalid">
+											<span ng-show="orderForm.transporterAdd.$error.required">Transporter Address is required.</span></span>
+											</div>
+										</div>	
+										<label for="agencyContact" class="col-sm-2 control-label">Contact Number</label>
+			                            <div class="col-sm-3">
+			                                <input type="text" class="form-control" ng-model="transport.mobileNumber" name="mobileNum" maxlength = "10" placeholder="Mobile Number" numbers-only="numbers-only" required >
+			                            
+				                            <div class="help-inline">
+				                             <span class="error" ng-show="orderForm.mobileNum.$dirty && orderForm.mobileNum.$invalid">
+											<span ng-show="orderForm.mobileNum.$error.required">Transporter Mobile Number is required</span></span>
+											</div>	
+										</div>	
+									</div>	
+								    <div class="form-group">	
+				                        <label for="dispatchFrom" class="col-sm-3 control-label">Transport Mode:</label>
+				                           <div class="col-sm-3">
+	                                		<select  class="form-control" ng-model="transport.transportMode"> 
+					                                	<option value="road" selected="selected">By Road</option>
+								                        <option value="train">By Train</option>
+					                                </select>
+	                            		</div>
+				                        <label for="receivedLoc" class="col-sm-2 control-label">Vehicle Number:</label>
+				                           <div class="col-sm-3">
+	                                		<input type="text" class="form-control" name="vehicleNum" ng-model="transport.vehicleNum" placeholder="Vehicle Number" maxlength = "20" required />
+		                            		<div class="help-inline">
+		                            		 <span class="error" ng-show="orderForm.vehicleNum.$dirty && orderForm.vehicleNum.$invalid">
+											<span ng-show="orderForm.vehicleNum.$error.required">Vehicle Number is required.</span></span>
+											</div>
+										</div>	
+				                   </div> 
+				                   
+				                  <hr> 
+				                    <div class="form-group">
 				                        <label for="labourCost" class="col-sm-3 control-label">Labour Fee(Rs.):</label>
 				                           <div class="col-sm-3">
 	                                		<input type="text" class="form-control" ng-model="order.labourFee" value = "0" maxlength = "20" required   ng-blur="calcOrderPriceWithLabour()"/>
@@ -141,34 +219,7 @@
 					                                </select>
 					                            </div>
 			                        </div>
-			                         <hr>
-			                        <div class="form-group">
-				                        <label for="dispatchFrom" class="col-sm-3 control-label">Dispatch From:</label>
-				                           <div class="col-sm-3">
-	                                		<input type="text" class="form-control" name = "fromLoc" ng-model="order.sourceLoc" placeholder="Place Name" maxlength = "50" required />
-	                            		</div>
-				                        <label for="receivedLoc" class="col-sm-2 control-label">To:</label>
-				                           <div class="col-sm-3">
-	                                		<input type="text" class="form-control" name="toLoc" ng-model="order.destinationLoc" placeholder="Place Name" maxlength = "50" required />
-	                            		</div>
-	                            		 <span class="error" ng-show="orderForm.fromLoc.$dirty && orderForm.fromLoc.$invalid">
-										<span ng-show="orderForm.fromLoc.$error.required">Dispatch from and to locations are required.</span></span>
-				                   </div> 
-				                     <div class="form-group">
-				                        <label for="dispatchFrom" class="col-sm-3 control-label">Transport Mode:</label>
-				                           <div class="col-sm-3">
-	                                		<select  class="form-control" ng-model="order.transMode"> 
-					                                	<option value="road" selected>By Road</option>
-								                        <option value="train">By Train</option>
-					                                </select>
-	                            		</div>
-				                        <label for="receivedLoc" class="col-sm-2 control-label">Vehicle Number:</label>
-				                           <div class="col-sm-3">
-	                                		<input type="text" class="form-control" name="vehicleNum" ng-model="order.vehicleNum" placeholder="Vehicle Number" maxlength = "20" required />
-	                            		</div>
-	                            		 <span class="error" ng-show="orderForm.vehicleNum.$dirty && orderForm.vehicleNum.$invalid">
-										<span ng-show="orderForm.vehicleNum.$error.required">Vehicle Number is required.</span></span>
-				                   </div> 
+			                         
 			                   	<hr>
 			                     <div class="form-group last">
 	                            	<div class="col-sm-offset-3 col-sm-6" >
@@ -189,7 +240,7 @@
 	               		<div class="table-responsive" style="overflow-x: auto;"> 
 	                    	<table   class="table table-striped table-hover">
 	                    			<tr>
-	                    				<th ng-click="sort('order_id')">Order Id
+	                    				<th ng-click="sort('order_id')">Challan Number
 	                    					<span class="glyphicon sort-icon" ng-show="sortKey=='order_id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span> 
 	                    				</th>
 	                    				<th ng-click="sort('retailer_name')">Retailer Name
@@ -201,11 +252,12 @@
 	                    				<th>Payment Mode</th>
 	                    				<th>Payment Status</th>
 	                    				<th>Amount Paid</th>
-	                    				<th>Order Date</th>
+	                    				<th>Challan Date</th>
+	                    				<th>Transport</th>
 	                    				<th>Action</th>
 	                    		 	</tr>
 	                    		 	<tr dir-paginate="generatedOrder in generatedOrderList|orderBy:sortKey:reverse|itemsPerPage:6">
-	                    		 		<td>{{generatedOrder.order.orderId}}</td>
+	                    		 		<td>{{generatedOrder.order.challanNumber}}</td>
 	                    		 		<td>{{generatedOrder.order.retailerDetail.retailerFirstName+" "+generatedOrder.order.retailerDetail.retailerLastName}}</td>
 	                    		 		<td><a href="" ng-click="showProductDetails(generatedOrder.orderedProductList)">View Product</a></td>
 	                    		 		<td>{{generatedOrder.order.orderTotalPrice}} </td>
@@ -214,8 +266,9 @@
 	                    		 		<td ng-if="generatedOrder.order.paymentStatus ==false">Pending</td>
 	                    		 		<td ng-if="generatedOrder.order.paymentStatus==true">Completed</td>
 	                    		 		<td><a href="" ng-click="showPaymentDetails(generatedOrder.paymentDetailList,generatedOrder.order)">View Payment</a></td>
-	                    		 		<td>{{generatedOrder.order.updOn| date:'dd/MM/yyyy'}}</a></td>
-	                    		 		<td><button type="submit" class="btn  btn-sm" ng-click="cancelOrder(generatedOrder.order.orderId)">Cancel</button></td>
+	                    		 		<td>{{generatedOrder.order.challanDate| date:'dd/MM/yyyy'}}</a></td>
+	                    		 		<td><a href="" ng-click="showtransport(generatedOrder.transportDetail)">View Transport</a></td>
+	                    		 		<td><button type="submit" class="btn btn-danger" ng-click="cancelOrder(generatedOrder.order.orderId)" ng-disabled="generatedOrder.order.orderStatusTypeId==4">Cancel</button></td>
 	                    		 	
 	                    		 	</tr>
 	                    	</table>
@@ -229,12 +282,16 @@
 	                                <button type="submit" analytics-on="click" analytics-event="generate Order" analytics-category="generateOrder" class="btn btn-success btn-sm" ng-click="isNewOrder=!isNewOrder">Generate New Order</button>
 	                         </div>
 	                    	</div>	
-	                    	<div class="popupOverlay" id="loadOverlay"  style="display:none;"></div>
+	                    	<!-- <div class="popupOverlay" id="loadOverlay"  style="display:none;"></div>
 								<div class="loadPopup" id="loadingCon"  style="display:none;">
 								<load-popup></load-popup>
-							</div>  
+							</div>  --> 
 	               	</div>
 	        </div>
+	        <div class="popupOverlay" id="loadOverlay"  style="display:none;"></div>
+								<div class="loadPopup" id="loadingCon"  style="display:none;">
+								<load-popup></load-popup>
+							</div> 
 	  </div>      
 	</div>
 </div>

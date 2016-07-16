@@ -39,9 +39,9 @@ public class AgencyDetailWrapper {
 	
 	private String state;
 	
-	private String agencyId;
+	private Integer agencyId;
 	
-	private String addressId;
+	private int addressId;
 
 	/**
 	 * @return the agencyName
@@ -172,28 +172,28 @@ public class AgencyDetailWrapper {
 	/**
 	 * @return the agencyId
 	 */
-	public String getAgencyId() {
+	public Integer getAgencyId() {
 		return agencyId;
 	}
 
 	/**
 	 * @param agencyId the agencyId to set
 	 */
-	public void setAgencyId(String agencyId) {
+	public void setAgencyId(Integer agencyId) {
 		this.agencyId = agencyId;
 	}
 
 	/**
 	 * @return the addressId
 	 */
-	public String getAddressId() {
+	public int getAddressId() {
 		return addressId;
 	}
 
 	/**
 	 * @param addressId the addressId to set
 	 */
-	public void setAddressId(String addressId) {
+	public void setAddressId(int addressId) {
 		this.addressId = addressId;
 	}
 

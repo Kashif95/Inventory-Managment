@@ -54,12 +54,11 @@ public class MedicineOrderController {
 		ObjectMapper mapper = new ObjectMapper();
 		LOGGER.debug("in order controller class");
 		Map userMap  = (Map) request.getSession().getAttribute(FMSConstant.USER_DETAIL);
-		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
 		MedicineOrderWrapper orderWrapper = null;
 		try{
 			
 			orderWrapper = mapper.readValue(order,MedicineOrderWrapper.class);
-			orderService.saveOrderDetail(orderWrapper,compType);
+			orderService.saveOrderDetail(orderWrapper,userMap);
 			
 		}catch(Exception e){
 			LOGGER.error("Database issue while saving order details in saveOrderDetail" +e);
@@ -83,26 +82,6 @@ public class MedicineOrderController {
 		return orderService.getOrderedProductList(orderId);
 	}
 	
-	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
-	@RequestMapping("/medicine/order/getPaymentDetails/{orderId}")
-	public @ResponseBody List<PaymentDetail> getPaymentDetails(@PathVariable int orderId){
-		
-		return paymentService.getPaymentInfoByOrderId(orderId);
-	}
-	
-	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
-	@RequestMapping("/medicine/order/savePaymentDetails")
-	public  String savePaymentDetails(@RequestBody PaymentDetail payment){
-		
-		try{
-			paymentService.saveTransactionDetail(payment);
-		}catch(HibernateException e){
-			LOGGER.error("database issue while saving payment data" +e);
-			throw new FMSCustomException("database issue while saving payment data");
-		} 
-		return "redirect:/medicine/order/getPaymentDetails/"+payment.getOrderId();
-		 
-	}
 	
 	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
 	@RequestMapping("/medicine/order/getOrderByOrderId/{orderId}")
@@ -123,7 +102,9 @@ public class MedicineOrderController {
 	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
 	@RequestMapping("/medicine/order/getOrderNumber")
 	public @ResponseBody String  getOrderNumber(HttpServletRequest request){
-		String orderNum =  orderService.getOrderNumber();
+		Map userMap  = (Map) request.getSession().getAttribute(FMSConstant.USER_DETAIL);
+		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
+		String orderNum =  orderService.getOrderNumber(compType);
 		return "{\"status\":\"success\", \"orderNum\":\"" + orderNum + "\"}";
 	}
 	

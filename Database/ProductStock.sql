@@ -22,3 +22,5 @@ ALTER TABLE  ProductStock ADD ExpiryDate DATETIME;
 
 ALTER TABLE  ProductStock ADD MedicineAgencyId INT;
 ALTER TABLE  ProductStock ADD CONSTRAINT FK_ProductStock_MedicalAgencyDetails_AgencyId FOREIGN KEY(MedicineAgencyId) REFERENCES MedicalAgencyDetails(AgencyId);
+
+ALTER TABLE  ProductStock ADD GodownAddress  NVARCHAR(800) ;

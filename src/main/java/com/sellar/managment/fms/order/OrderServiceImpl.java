@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.sellar.managment.fms.FMSCustomException;
 import com.sellar.managment.fms.inventory.InventoryService;
 import com.sellar.managment.fms.inventory.domain.ProductStock;
 import com.sellar.managment.fms.order.domain.GeneratedOrderDetails;
@@ -24,6 +25,8 @@ import com.sellar.managment.fms.order.domain.OrderWrapper;
 import com.sellar.managment.fms.order.domain.OrderedProduct;
 import com.sellar.managment.fms.transaction.PaymentService;
 import com.sellar.managment.fms.transaction.domain.PaymentDetail;
+import com.sellar.managment.fms.user.UserService;
+import com.sellar.managment.fms.util.EmailService;
 import com.sellar.managment.fms.util.FMSConstant;
 import com.sellar.managment.fms.util.FPSUtility;
 
@@ -42,12 +45,20 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	PaymentService paymentService;
+	
+	@Autowired
+	EmailService emailServie;
+	
+	
+	
+	
+	
 
 	@Override
 	public void saveOrderDetail(OrderWrapper orderWrapper,Map userMap) {
-		// TODO Auto-generated method stub
+		
+	try{	
 		OrderDetail orderDetail = orderWrapper.getOrder();
-		//orderDetail.setOrderId(FPSUtility.generateOrderId());
 		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
 		String userName = (String)userMap.get(FMSConstant.USER_NAME);
 		
@@ -63,10 +74,15 @@ public class OrderServiceImpl implements OrderService{
 			ProductStock prodStock = inventoryService.getProductStockByStockId(product.getStockId());
 			float quantity = prodStock.getQuantity()-product.getQuantity();
 			prodStock.setQuantity(quantity);
-			inventoryService.saveStockDetails(prodStock,compType);
+			inventoryService.saveStockDetails(prodStock,compType,userName);
 		}
-		
-		saveTransportDetail(orderWrapper.getTransportDetail(),userName);
+		OrderTransportDetail transport = orderWrapper.getTransportDetail();
+		transport.setOrderId(orderDetail.getOrderId());
+		saveTransportDetail(transport,userName);
+		emailServie.SendEmail("Order Generation Notification", getEmailMessage(orderDetail), "prasadfertilizernokha@gmail.com");
+	}catch(Exception e){
+		throw new FMSCustomException("Error while saving order" + e.getMessage());
+	}
 		
 		
 		
@@ -86,8 +102,12 @@ public class OrderServiceImpl implements OrderService{
 			transportDetail.setUpdBy(userName);
 			transportDetail.setUpdOn(new Date());
 		}
+		try{
+			orderDao.saveOrderTransportDetail(transportDetail);
+		}catch(Exception e){
+			throw new FMSCustomException("Error while saving order transport detail"+ e.getMessage());
+		}
 		
-		orderDao.saveOrderTransportDetail(transportDetail);
 	}
 
 	@Override
@@ -100,6 +120,7 @@ public class OrderServiceImpl implements OrderService{
 			generatedOrder.setOrder(order);
 			generatedOrder.setOrderedProductList(orderDao.getAllOrderdProductByOrderId(order.getOrderId()));
 			generatedOrder.setPaymentDetailList(paymentService.getPaymentInfoByOrderId(order.getOrderId()));
+			generatedOrder.setTransportDetail(orderDao.getTransportDetailByOrderId(order.getOrderId()));
 			generatedOrderList.add(generatedOrder);
 		}
 		return generatedOrderList;
@@ -133,24 +154,50 @@ public class OrderServiceImpl implements OrderService{
 			orderDetail.setUpdBy(userName);
 			orderDetail.setUpdOn(new Date());
 		}
+		try{
+			orderDao.saveOrderDetail(orderDetail);
+		}catch(Exception e){
+			throw new FMSCustomException("Error while saving order  detail"+ e.getMessage());
+		}
 		
-		orderDao.saveOrderDetail(orderDetail);
 	}
 
 	@Override
-	public void cancelOrderByOrderId(int orderId,Short compType) {
+	public void cancelOrderByOrderId(int orderId,Map userMap) {
 		// TODO Auto-generated method stub
-		
+		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
+		String userName = (String) userMap.get(FMSConstant.USER_NAME);
 		OrderDetail order = orderDao.getOrderDetailsByOrderId(orderId);
 		List<OrderedProduct> orderedProductList = orderDao.getAllOrderdProductByOrderId(orderId);
 		for(OrderedProduct orderedProduct :  orderedProductList){
 			float updatedQuan = orderedProduct.getQuantity() + orderedProduct.getProductStock().getQuantity();
 			orderedProduct.getProductStock().setQuantity(updatedQuan);
-			inventoryService.saveStockDetails(orderedProduct.getProductStock(),compType);
+			inventoryService.saveStockDetails(orderedProduct.getProductStock(),compType,userName);
 			
 		}
 		order.setOrderStatusTypeId(FMSConstant.ORDERSTATUSTYPE_CANCELLED);
+		order.setUpdBy(userName);
+		order.setUpdOn(new Date());
 		orderDao.saveOrderDetail(order);
+	}
+
+	@Override
+	public String getOrderNumber(Short compType) {
+		// TODO Auto-generated method stub
+		Integer orderId = orderDao.getLastOrderId();
+		return FPSUtility.generateOrderNumber(orderId,compType);
+	}
+	
+	public String getEmailMessage(OrderDetail order){
+		
+		String emailText = "Dear Saler,"+
+							"\n\nOne new order of challan number"+ order.getChallanNumber() + " ,challan date" + order.getChallanDate()+
+							"Total order price is "+order.getOrderTotalPrice()+
+							"To retailer"+order.getRetailerDetail().getRetailerFirstName()+" "+ order.getRetailerDetail().getRetailerLastName()+
+							"has been generated successfully ";
+		
+		return emailText;
+		
 	}
 
 

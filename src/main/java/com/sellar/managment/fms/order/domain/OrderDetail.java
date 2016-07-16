@@ -60,6 +60,13 @@ public class OrderDetail {
 	@Column(name="PendingAmount")
 	private float pendingAmount;
 	
+	@Column(name="ChallanNumber")
+	private String challanNumber;
+	
+	@Column(name="ChallanDate")
+	private Date challanDate;
+	
+	
 	@Column(name = "ODCrd")
 	private Date createdOn;
     
@@ -303,7 +310,37 @@ public class OrderDetail {
 	 */
 	public void setPendingAmount(float pendingAmount) {
 		this.pendingAmount = pendingAmount;
+	}
+
+	/**
+	 * @return the challanNumber
+	 */
+	public String getChallanNumber() {
+		return challanNumber;
+	}
+
+	/**
+	 * @param challanNumber the challanNumber to set
+	 */
+	public void setChallanNumber(String challanNumber) {
+		this.challanNumber = challanNumber;
+	}
+
+	/**
+	 * @return the challanDate
+	 */
+	public Date getChallanDate() {
+		return challanDate;
+	}
+
+	/**
+	 * @param challanDate the challanDate to set
+	 */
+	public void setChallanDate(Date challanDate) {
+		this.challanDate = challanDate;
 	} 
+	
+	
 	
 	
 	

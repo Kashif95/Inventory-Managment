@@ -20,7 +20,7 @@ public interface ProductDAO {
 
 	void deleteProduct(ProductDetail productDetail);
 
-	ProductDetail getProductByProductId(String productId);
+	ProductDetail getProductByProductId(int productId);
 
 	List<ProductDetail> getProductListByAgencyId(Integer agencyId, Short compId);
 

@@ -17,5 +17,8 @@ CONSTRAINT FK_OrderDetail_RetailerDetails_RetailerId FOREIGN KEY(RetailerId) REF
 CONSTRAINT FK_OrderDetail_OrderStatus_OrderStatusTypeId FOREIGN KEY(OrderStatusTypeId) REFERENCES OrderStatus(OrderStatusTypeId)
 );
 
-ALTER TABLE OrderDetail AUTO_INCREMENT = 100000;
+ALTER TABLE OrderDetail AUTO_INCREMENT = 1000;
 ALTER TABLE OrderDetail ADD  PendingAmount FLOAT NOT NULL DEFAULT 0;
+
+ALTER TABLE OrderDetail ADD ChallanNumber NVARCHAR(200);
+ALTER TABLE OrderDetail ADD ChallanDate DATETIME

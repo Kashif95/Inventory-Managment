@@ -91,10 +91,12 @@ public class OrderController {
 	
 	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
 	@RequestMapping("/order/savePaymentDetails")
-	public  String savePaymentDetails(@RequestBody PaymentDetail payment){
+	public  String savePaymentDetails(@RequestBody PaymentDetail payment,HttpServletRequest request){
 		
 		try{
-			paymentService.saveTransactionDetail(payment);
+			Map userMap  = (Map) request.getSession().getAttribute(FMSConstant.USER_DETAIL);
+			String userName = (String) userMap.get(FMSConstant.USER_NAME);
+			paymentService.saveTransactionDetail(payment,userName);
 		}catch(HibernateException e){
 			LOGGER.error("database issue while saving payment data" +e);
 			throw new FMSCustomException("database issue while saving payment data");
@@ -114,9 +116,17 @@ public class OrderController {
 	@RequestMapping("/order/cancelOrderByOrderId/{orderId}")
 	public String  cancelOrderByOrderId(@PathVariable int orderId,HttpServletRequest request){
 		Map userMap  = (Map) request.getSession().getAttribute(FMSConstant.USER_DETAIL);
-		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
-		 orderService.cancelOrderByOrderId(orderId,compType);
+		 orderService.cancelOrderByOrderId(orderId,userMap);
 		 return "redirect:/order/getOrderDetailsList";
+	}
+	
+	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
+	@RequestMapping("/order/getOrderNumber")
+	public @ResponseBody String  getOrderNumber(HttpServletRequest request){
+		Map userMap  = (Map) request.getSession().getAttribute(FMSConstant.USER_DETAIL);
+		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
+		String orderNum =  orderService.getOrderNumber(compType);
+		return "{\"status\":\"success\", \"orderNum\":\"" + orderNum + "\"}";
 	}
 	
 	

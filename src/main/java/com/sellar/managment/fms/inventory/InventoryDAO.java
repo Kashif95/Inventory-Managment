@@ -6,6 +6,7 @@ package com.sellar.managment.fms.inventory;
 import java.util.List;
 
 import com.sellar.managment.fms.inventory.domain.ProductStock;
+import com.sellar.managment.fms.inventory.domain.ProductStockMiscDetails;
 
 /**
  * @author rakumari
@@ -24,5 +25,11 @@ public interface InventoryDAO {
 	ProductStock getProductStockByStockId(int stockId);
 
 	void deleteStock(ProductStock stock);
+
+	void saveStockMiscDetails(ProductStockMiscDetails misc);
+
+	List<ProductStockMiscDetails> getProductStockMiscDetailsList();
+
+	Integer getTotalStockQuantityByProductId(int productId);
 
 }

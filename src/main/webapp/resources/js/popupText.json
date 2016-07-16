@@ -15,6 +15,14 @@
 		  "updatePayment":{
     	 	"text":"Update Order Payment",
      		"header":"Success"
+		 },
+		 "transport":{
+    	 	"text":"Transport",
+     		"header":"Transport Details"
+		 },
+		 "cancelOrder":{
+    	 	"text":"Do you want to Cancel Order",
+     		"header":"Cancel Order"
 		 }
 	}	 
 }    	

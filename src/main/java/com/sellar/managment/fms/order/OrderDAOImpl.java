@@ -6,7 +6,9 @@ package com.sellar.managment.fms.order;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -69,6 +71,25 @@ public class OrderDAOImpl implements OrderDAO{
 	public void saveOrderTransportDetail(OrderTransportDetail transportDetail) {
 		// TODO Auto-generated method stub
 		sessionFactory.getCurrentSession().saveOrUpdate(transportDetail);
+	}
+
+	@Override
+	public Integer getLastOrderId() {
+		// TODO Auto-generated method stub
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(
+                "SELECT max(OrderId) maxId from OrderDetail");
+		query.addScalar("maxId", new IntegerType());
+		Integer maxOrderId = (Integer) query.uniqueResult();
+		return maxOrderId;
+	}
+
+	@Override
+	public OrderTransportDetail getTransportDetailByOrderId(int orderId) {
+		// TODO Auto-generated method stub
+		Query query = sessionFactory.getCurrentSession().createQuery(
+                "from OrderTransportDetail where orderId = :orderId");
+		query.setParameter("orderId", orderId);
+		return (OrderTransportDetail) query.uniqueResult();
 	}
 
 

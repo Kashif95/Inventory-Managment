@@ -5,8 +5,12 @@ body {
  -moz-background-size: cover;
  -o-background-size: cover;
  background-size: cover;
+  height:100%;
+ 
 } 
-
+.container{
+	width:1400px;
+}
 
 div > img{
 	width: 50%;
@@ -43,13 +47,20 @@ div > img{
 .header-logo{float:left; margin:0; padding:0;}
 
 .navbar{background: #009b3e; margin:0;}
-.navbar-brand{padding:2px 7px 0;}
-.navbar-fixed-top{border-width:0 0 0px}
+/* .navbar-brand{padding:2px 7px 0;} */
+/* .navbar-fixed-top{border-width:0 0 0px} */
 /* .menuClass{padding:0; margin:0 0 0 190px; width:100%;} */
 
-.img-responsive{
-	width: 52%
+.navbar-brand {
+  padding: 1px; 
+} 
+.navbar-brand>img {
+  max-height: 100%;
+   height: 100%;
+   width: auto;
+   margin: 0 auto;
 }
+
 /* Sidebar Styles */
 
 .subMenu-nav {
@@ -65,13 +76,13 @@ div > img{
     line-height: 40px;
 } 
 
-.navbar-nav li a {
+.navbar-default .navbar-nav > li > a {
     display: block;
     text-decoration: none;
     color: #000;
 }
 
-.navbar-nav li a:hover {
+.navbar-default .navbar-nav > li > a:hover {
     text-decoration: none;
     color: #fff;
     background: rgba(255,255,255,0.2);
@@ -171,3 +182,7 @@ hr{
 .popupText{text-align:center;width:280px;height:40px;padding:10px;font-size:14px;}
 
 .userName{padding-left: 40%;}
+
+.disabled {
+  cursor: not-allowed;
+}

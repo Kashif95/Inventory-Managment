@@ -24,6 +24,7 @@ import com.sellar.managment.fms.product.domain.ProductType;
 @Component("agencyProduct")
 public class ProductDAOImpl implements ProductDAO{
 	
+	@Autowired
 	SessionFactory sessionFactory;
 
 	@Override
@@ -50,7 +51,7 @@ public class ProductDAOImpl implements ProductDAO{
 	}
 
 	@Override
-	public ProductDetail getProductByProductId(String productId) {
+	public ProductDetail getProductByProductId(int productId) {
 		// TODO Auto-generated method stub
 		ProductDetail productDetail = (ProductDetail) sessionFactory.getCurrentSession().get(ProductDetail.class, productId);
 		return productDetail;
@@ -79,10 +80,10 @@ public class ProductDAOImpl implements ProductDAO{
 	}
 	/**
 	 * @param sessionFactory the sessionFactory to set
-	 */
+	 *//*
 	@Autowired(required=true)
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}
+	}*/
 
 }

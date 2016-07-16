@@ -17,7 +17,7 @@ public interface AgencyDAO {
 	
 	List<AgencyDetail> getAllAgencyList();
 	
-	AgencyDetail getAgencyDetailByAgencyId(String agencyId);
+	AgencyDetail getAgencyDetailByAgencyId(Integer agencyId);
 
 	void deleteAgencyDetail(AgencyDetail agencyDetail);
 

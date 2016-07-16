@@ -12,14 +12,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import com.sellar.managment.fms.agency.domain.AgencyDetail;
 import com.sellar.managment.fms.product.domain.ProductDetail;
-import com.sellar.managment.fms.user.domain.UserCompanyType;
+import com.sellar.managment.fms.util.CustomDateAndTimeFormat;
 import com.sellar.managment.medicine.agency.domain.MedicalAgencyDetail;
 
 /**
@@ -51,6 +52,7 @@ public class ProductStock {
 	@Column(name="SellingPrice")
 	private float sellingPrice;
 	
+	@JsonDeserialize(using=CustomDateAndTimeFormat.class)
 	@Column(name="ArrivalDate")
 	private Date arrivalDate;
 	
@@ -77,7 +79,10 @@ public class ProductStock {
     
     @Column(name="ExpiryDate")
 	private Date expiryDate;
-	
+    
+    @Column(name="GodownAddress")
+    private String godownAddress;
+    
     
     @ManyToOne(targetEntity = AgencyDetail.class)
     @JoinColumn(name = "AgencyId", referencedColumnName = "AgencyId", insertable = false, updatable = false)
@@ -91,9 +96,10 @@ public class ProductStock {
     @JoinColumn(name = "ProductId", referencedColumnName = "ProductId", insertable = false, updatable = false)
     private ProductDetail productDetail;
     
-    @ManyToOne(targetEntity = UserCompanyType.class)
-    @JoinColumn(name = "UserCompTypeId", referencedColumnName = "UserCompTypeId", insertable = false, updatable = false)
-    private UserCompanyType companyType;
+    
+    @OneToOne(targetEntity=ProductStockMiscDetails.class)
+    @JoinColumn(name = "ProductStockId", referencedColumnName = "ProductStockId", insertable = false, updatable = false)
+    private ProductStockMiscDetails stockMiscDetail;
 
 	/**
 	 * @return the productStockId
@@ -332,6 +338,38 @@ public class ProductStock {
 	public void setMedicineAgencyDetail(MedicalAgencyDetail medicineAgencyDetail) {
 		this.medicineAgencyDetail = medicineAgencyDetail;
 	}
+
+	/**
+	 * @return the godownAddress
+	 */
+	public String getGodownAddress() {
+		return godownAddress;
+	}
+
+	/**
+	 * @param godownAddress the godownAddress to set
+	 */
+	public void setGodownAddress(String godownAddress) {
+		this.godownAddress = godownAddress;
+	}
+
+	/**
+	 * @return the stockMiscDetail
+	 */
+	public ProductStockMiscDetails getStockMiscDetail() {
+		return stockMiscDetail;
+	}
+
+	/**
+	 * @param stockMiscDetail the stockMiscDetail to set
+	 */
+	public void setStockMiscDetail(ProductStockMiscDetails stockMiscDetail) {
+		this.stockMiscDetail = stockMiscDetail;
+	}
+	
+	
+
+
 	
 	
 	

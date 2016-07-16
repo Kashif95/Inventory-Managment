@@ -42,7 +42,7 @@ public class AgencyDAOImpl implements AgencyDAO{
 	}
 
 	@Override
-	public AgencyDetail getAgencyDetailByAgencyId(String agencyId) {
+	public AgencyDetail getAgencyDetailByAgencyId(Integer agencyId) {
 		// TODO Auto-generated method stub
 		Query query  = sessionFactory.getCurrentSession().createQuery("from AgencyDetail where agencyId = :agencyId");
 		query.setParameter("agencyId", agencyId);

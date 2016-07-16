@@ -10,7 +10,7 @@ public interface UserDAO {
 
 	UserDetails getUserByUserId(String userId);
 
-	AddressDetail getAddressByAddressId(String addressId);
+	AddressDetail getAddressByAddressId(int addressId);
 
 	List<UserType> getAllUserType();
 

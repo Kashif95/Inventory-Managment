@@ -4,7 +4,6 @@
 package com.sellar.managment.fms;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -23,20 +21,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.sellar.managment.fms.agency.AgencyService;
 import com.sellar.managment.fms.agency.domain.AgencyDetail;
 import com.sellar.managment.fms.agency.domain.AgencyDetailWrapper;
-import com.sellar.managment.fms.login.LoginController;
 import com.sellar.managment.fms.product.ProductService;
 import com.sellar.managment.fms.product.domain.ProductDetail;
 import com.sellar.managment.fms.product.domain.ProductDetailWrapper;
@@ -85,6 +79,7 @@ public class FMSController {
 		userDetailMap.put(FMSConstant.USER_ROLE, user.getAuthorities().toArray()[0]);
 		userDetailMap.put(FMSConstant.USER_COMPANY, user.getCompanyType());
 		request.getSession().setAttribute(FMSConstant.USER_DETAIL, userDetailMap);
+		
 		ObjectMapper map = new ObjectMapper();
 		String userDetailMapString=null;
 		try {
@@ -132,7 +127,7 @@ public class FMSController {
 	
 	@PreAuthorize("isFullyAuthenticated()")
 	@RequestMapping("/agency/getAgencyById")
-	public @ResponseBody AgencyDetailWrapper getAgencyDetailById(@RequestBody String agencyId){
+	public @ResponseBody AgencyDetailWrapper getAgencyDetailById(@RequestBody Integer agencyId){
 		
 		return agencyService.getAgencyDetailByAgencyId(agencyId);
 	}
@@ -177,7 +172,7 @@ public class FMSController {
 	@RequestMapping("/retailer/getRetailerById")
 	public @ResponseBody RetailerDetail getRetailerDetailById(@RequestBody String retailerId){
 		
-		return retailerService.getRetailerDetailByRetailerId(retailerId);
+		return retailerService.getRetailerDetailByRetailerId(Integer.getInteger(retailerId));
 	}
 	
 	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")
@@ -197,9 +192,7 @@ public class FMSController {
 	@PreAuthorize("isFullyAuthenticated()")
 	@RequestMapping("/product/getProductList")
 	public @ResponseBody  List<ProductDetail> getAllProductList(HttpServletRequest request){
-		Map userMap  = (Map) request.getSession().getAttribute(FMSConstant.USER_DETAIL);
-		Short compType = (Short) userMap.get(FMSConstant.USER_COMPANY);
-		return productService.getAllProductList(compType);
+		return productService.getAllProductList(userService.getLoggedInUserCompType(request));
 	}
 	
 	@PreAuthorize("isFullyAuthenticated() and  hasAnyRole('Admin')")

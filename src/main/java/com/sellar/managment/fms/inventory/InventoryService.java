@@ -6,6 +6,7 @@ package com.sellar.managment.fms.inventory;
 import java.util.List;
 
 import com.sellar.managment.fms.inventory.domain.ProductStock;
+import com.sellar.managment.fms.inventory.domain.ProductStockMiscDetails;
 
 /**
  * @author rakumari
@@ -13,7 +14,7 @@ import com.sellar.managment.fms.inventory.domain.ProductStock;
  */
 public interface InventoryService {
 
-	void saveStockDetails(ProductStock stock, Short compType);
+	void saveStockDetails(ProductStock stock,Short compType, String userName);
 
 	List<ProductStock> getProductStockList(Short compType);
 
@@ -22,6 +23,11 @@ public interface InventoryService {
 	ProductStock getProductStockByStockId(int stockId);
 
 	void deleteStock(ProductStock stock);
+
+	void saveStockMiscDetails(ProductStockMiscDetails misc, short compType,
+			String userName);
+
+	Integer getTotalStockQuantityByProductId(int productId);
 
 	
 

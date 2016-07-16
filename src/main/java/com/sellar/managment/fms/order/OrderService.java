@@ -28,7 +28,9 @@ public interface OrderService {
 	
 	void saveOrder(OrderDetail orderDetail,String userName);
 
-	void cancelOrderByOrderId(int orderId, Short compType);
+	void cancelOrderByOrderId(int orderId, Map userMap);
+
+	String getOrderNumber(Short compType);
 
 
 }
